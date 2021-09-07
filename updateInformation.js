@@ -95,7 +95,6 @@ export function updateHoeStats() {
         hoeStats.rarity = 0;
         hoeStats.bountiful = false;
     }
-
 }
 
 export function aggregateFarmingFortune() {
@@ -115,20 +114,9 @@ export function aggregateFarmingFortune() {
 
 export function updateGlobalFarmingStats(xpPerHour) {
 
-    //get all farming for dummies
-    let temp = 0;
-    for (let i = 0; i < 36; i++) {
-        let is = Player.getInventory().getStackInSlot(i);
-        if (is == null) {
-            i++;
-            return;
-        }
-        let attr = is.getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
-        if (attr.getInteger('farming_for_dummies_count')) {
-            temp += attr.getInteger('farming_for_dummies_count');
-        }
-    }
-    globalStats.fFD = temp;
+    // get FFD
+    const heldItem = Player.getHeldItem().getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
+    globalStats.fFD = heldItem.getInteger('farming_for_dummies_count');
 
     // get Elephant level
     let playerName = Player.getName();

@@ -1,7 +1,7 @@
 import Settings from "./config";
 import gui, {npcPricing, collectionTypeToBlocks, blockToMCBlockName, bazaarFarmingCompression, playerInformation, farmingBlockDrops, farmingBlockTypes, hoeStats, collection, globalStats, mouseInformation} from './utils/constants';
 import {initializeToolInfo, renderToolInfo} from "./displays/toolInfo";
-import { updateElementaGUI} from "./displays/elementaDisplay";
+import {updateElementaGUI} from "./displays/elementaDisplay";
 import {aggregateFarmingFortune, updateGlobalFarmingStats, updateHoeStats} from "./updateInformation";
 import {getApiData, getBazaarData} from "./utils/getApiData";
 import {addCommas, memorySizeOf, addCropDrop, checkInput, getCropDrop, resetGlobalFarmingInformation, updateSetting} from "./utils/utils";
