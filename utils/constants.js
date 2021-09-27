@@ -108,22 +108,38 @@ export let collection = {
     },
 }
 
+export const cropToImage = {
+    "Carrot": "carrot",
+    "Melon": "melon",
+    "Wheat": "wheat",
+    "Nether Wart": "wart",
+    "Pumpkin": "pumpkin",
+    "Sugar Cane": "cane",
+    "Cactus": "cactus",
+    "Potato": "potato",
+    "Mushroom": "mushroom",
+    "Cocoa Beans": "cocoa"
+}
+
 export let mouseInformation = {
     x: undefined,
     y: undefined,
     toolInfo: undefined,
     xpInfo: undefined,
+    jacob: undefined,
     getters: {
         getX: () => mouseInformation._x,
         getY: () => mouseInformation._y,
         getToolInfo: () => mouseInformation._toolInfo,
         getXpInfo: () => mouseInformation._xpInfo,
+        getJacob: () => mouseInformation._jacob,
     },
     setters: {
         setX: (x) => mouseInformation._x = x,
         setY: (y) => mouseInformation._y = y,
         setToolInfo: (toolInfo) => mouseInformation._toolInfo = toolInfo,
         setXpInfo: (xpInfo) => mouseInformation._xpInfo = xpInfo,
+        setJacob: (jacob) => mouseInformation._jacob = jacob,
     },
 }
 
@@ -163,6 +179,9 @@ export let globalStats = {
     oldPercentage: undefined,
     yieldPerHour: "",
     cropGain: 0,
+    jacobEvents: undefined,
+    timeUntilJacobs: "",
+    nextJacobCrops: undefined,
     getters: {
         getTimeLeftUntilNextLevel: () => globalStats._timeLeftUntilNextLevel,
         getAnita: () => globalStats._anita,
@@ -183,6 +202,9 @@ export let globalStats = {
         getOldPercentage: () => globalStats._oldPercentage,
         getYieldPerHour: () => globalStats._yieldPerHour,
         getCropGain: () => globalStats._cropGain,
+        getJacobEvents: () => globalStats._jacobEvents,
+        getTimeUntilJacobs: () => globalStats._timeUntilJacobs,
+        getNextJacobCrops: () => globalStats._nextJacobCrops,
     },
     setters: {
         setTimeLeftUntilNextLevel: (timeLeftUntilNextLevel) => globalStats._timeLeftUntilNextLevel = timeLeftUntilNextLevel,
@@ -204,6 +226,9 @@ export let globalStats = {
         setOldPercentage: (oldPercentage) => globalStats._oldPercentage = oldPercentage,
         setYieldPerHour: (yieldPerHour) => globalStats._yieldPerHour = yieldPerHour,
         setCropGain: (cropGain) => globalStats._cropGain = cropGain,
+        setJacobEvents: (jacobEvents) => globalStats._jacobEvents = jacobEvents,
+        setTimeUntilJacobs: (timeUntilJacobs) => globalStats._timeUntilJacobs = timeUntilJacobs,
+        setNextJacobCrops: (nextJacobCrops) => globalStats._nextJacobCrops = nextJacobCrops,
     },
 }
 

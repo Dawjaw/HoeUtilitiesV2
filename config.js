@@ -17,6 +17,39 @@ class Settings {
         gui.open();
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+
+    // next Jacob Event
+    @SwitchProperty({
+        name: "Toggle next Jacobs Event",
+        description: "Toggle the next Jacob Event",
+        category: "General",
+        subcategory: "Jacob's Event",
+    })
+    showJacobTimer = true;
+
+    @NumberProperty({
+        name: "JacobX",
+        category: "General",
+        subcategory: "Jacob's Event",
+        hidden: true
+    })
+    jacob_x = 50;
+
+    @NumberProperty({
+        name: "JacobY",
+        category: "General",
+        subcategory: "Jacob's Event",
+        hidden: true
+    })
+    jacob_y = 50;
+
+    //-----------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+
     // Tool Info Gui location
     @SwitchProperty({
         name: "Toggle Tool Info",
@@ -124,7 +157,7 @@ class Settings {
         category: 'XP',
         subcategory: 'Customization',
     })
-    xpInfoBackgroundColor = Color.WHITE;
+    xpInfoBackgroundColor = Color.BLUE;
 
     @SelectorProperty({
         name: "Text Alignment",

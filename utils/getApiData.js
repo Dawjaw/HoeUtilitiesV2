@@ -123,3 +123,14 @@ export function getBazaarData(return_price) {
     });
     return return_price;
 }
+
+export function getJacobEvents() {
+    sendRequest('https://jacobs.jeanlaurent.fr/data/jacobs.json')
+        .then(json => {
+            globalStats.jacobEvents = json;
+        }).catch(e => {
+            console.log("Error JacobEvent", e.stack);
+            console.log("Error JacobEvent", e.name);
+            console.log("Error JacobEvent", e.message);
+    });
+}

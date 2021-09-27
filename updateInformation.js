@@ -82,7 +82,6 @@ export function updateHoeStats() {
                 }
             }
         }
-
     }
 
     if (heldItem.getString('modifier') === 'blessed') {

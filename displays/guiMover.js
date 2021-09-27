@@ -38,6 +38,10 @@ export function initiateGuiMover(toolInfo, xpInfo) {
             Settings.xp_gui_y += dy;
             xpInfo.setRenderLoc(Settings.xp_gui_x, Settings.xp_gui_y);
         }
+        if (mouseInformation.jacob) {
+            Settings.jacob_x += dx;
+            Settings.jacob_y += dy;
+        }
     }
 
     function releaseFunc() {
@@ -48,11 +52,15 @@ export function initiateGuiMover(toolInfo, xpInfo) {
         updateSetting("xpinfox", Settings.xp_gui_x)
         updateSetting("xpinfoy", Settings.xp_gui_y)
 
+        updateSetting("jacobx", Settings.jacob_x)
+        updateSetting("jacoby", Settings.jacob_y)
+
         //reset
         isObjectSelected = false;
         xpIsSelected = false;
         mouseInformation.xpInfo = false;
         mouseInformation.toolInfo = false;
+        mouseInformation.jacob = false;
 
         elementaStuff.isGuiMovable = false;
 

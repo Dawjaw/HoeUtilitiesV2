@@ -1,4 +1,4 @@
-import {units} from "../utils/constants";
+import {units, playerInformation} from "../utils/constants";
 import Settings from "../config";
 import {addCommas} from "../utils/utils";
 
@@ -39,5 +39,6 @@ export function calculateYieldPerHour(startTimeValue, lastTimeValue, totalXp) {
             break;
     }
     avg_per_second = avg_per_second * unitModif * precisionModif;
+    if (playerInformation.crop === 'cane') avg_per_second = avg_per_second / 2; 
     return addCommas(Math.round(avg_per_second));
 }

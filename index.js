@@ -1,9 +1,9 @@
 import Settings from "./config";
-import gui, {npcPricing, collectionTypeToBlocks, blockToMCBlockName, bazaarFarmingCompression, playerInformation, farmingBlockDrops, farmingBlockTypes, hoeStats, collection, globalStats, mouseInformation} from './utils/constants';
+import gui, {npcPricing, blockToMCBlockName, bazaarFarmingCompression, playerInformation, farmingBlockTypes, hoeStats, collection, globalStats} from './utils/constants';
 import {initializeToolInfo, renderToolInfo} from "./displays/toolInfo";
 import {updateElementaGUI} from "./displays/elementaDisplay";
 import {aggregateFarmingFortune, updateGlobalFarmingStats, updateHoeStats} from "./updateInformation";
-import {getApiData, getBazaarData} from "./utils/getApiData";
+import {getApiData, getBazaarData, getJacobEvents} from "./utils/getApiData";
 import {addCommas, memorySizeOf, addCropDrop, checkInput, getCropDrop, resetGlobalFarmingInformation, updateSetting} from "./utils/utils";
 import {initializeXpInfo, renderXpInfo} from "./displays/xpInfo";
 import {guiMover, initiateGuiMover} from "./displays/guiMover";
@@ -87,16 +87,29 @@ register('chat', (key) => {
 // api
 API_C = getApiData(API_C);
 bazaarObject = getBazaarData(bazaarObject);
+getJacobEvents();
 
 // gui initialization
 export let toolInfo = initializeToolInfo();
 export let xpInfo = initializeXpInfo();
 
+// cache images 
+const image1 = new Image("carrot.png", "https://jacobs.jeanlaurent.fr/assets/img/carrot.png");
+const image2 = new Image("melon.png", "https://jacobs.jeanlaurent.fr/assets/img/melon.png");
+const image3 = new Image("cocoa.png", "https://jacobs.jeanlaurent.fr/assets/img/cocoa_beans.png");
+const image4 = new Image("pumpkin.png", "https://jacobs.jeanlaurent.fr/assets/img/pumpkin.png");
+const image5 = new Image("cane.png", "https://jacobs.jeanlaurent.fr/assets/img/sugar_cane.png");
+const image6 = new Image("cactus.png", "https://jacobs.jeanlaurent.fr/assets/img/cactus.png");
+const image7 = new Image("potato.png", "https://jacobs.jeanlaurent.fr/assets/img/potato.png");
+const image8 = new Image("mushroom.png", "https://jacobs.jeanlaurent.fr/assets/img/mushroom.png");
+const image9 = new Image("wheat.png", "https://jacobs.jeanlaurent.fr/assets/img/wheat.png");
+const image10 = new Image("wart.png", "https://jacobs.jeanlaurent.fr/assets/img/nether_wart.png");
+
 // gui move
 initiateGuiMover(toolInfo, xpInfo);
 register('renderOverlay', guiMover);
 register("renderOverlay", () => {
-    if (playerInformation.toolIsEquipped && !Settings.showLegacyGUI){
+    if (!Settings.showLegacyGUI){
         updateElementaGUI();
     }
 }).setPriority(Priority.LOWEST);
@@ -152,7 +165,27 @@ register('step', () => {
     updateGlobalFarmingStats(xpPerHour);
     aggregateFarmingFortune();
     resetLiveCounters();
-
+    if(globalStats.jacobEvents !== undefined){
+        for (jEvent of globalStats.jacobEvents) {
+            let currentTime = Math.floor((new Date()).getTime() / 1000);
+            let eventTime = jEvent['time'];
+            if (currentTime < eventTime) {
+                let dateObject = new Date(eventTime * 1000);
+                let humanDateFormat = dateObject.toLocaleString()
+                let delta = eventTime - currentTime;
+                let minutes = Math.floor(delta / 60);
+                let seconds = delta % 60;
+                globalStats.timeUntilJacobs = `${minutes}:${seconds}`;
+                let eventString = [];
+                jEvent['crops'].forEach((crop) => {
+                    eventString.push(crop);
+                });
+                globalStats.nextJacobCrops = eventString;
+                //console.log(humanDateFormat, minutes, seconds);
+                break;
+            }
+        }
+    }
 }).setDelay(1);
 
 register('step', () => {
@@ -165,6 +198,7 @@ register('step', () => {
     if(World.isLoaded()){
         bazaarObject = getBazaarData(bazaarObject);
     }
+    getJacobEvents();
 }).setDelay(240);
 
 // waiting for ct 2.0 to get fixed

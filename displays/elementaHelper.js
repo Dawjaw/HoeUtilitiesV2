@@ -1,5 +1,5 @@
 import {
-    Window, UIText, UIContainer, UIRoundedRectangle,
+    Window, UIText, UIContainer, UIRoundedRectangle, UIImage,
     ChildBasedMaxSizeConstraint, CenterConstraint,
     SiblingConstraint, ChildBasedSizeConstraint,
     ConstantColorConstraint, AdditiveConstraint,
@@ -21,6 +21,7 @@ import gui, {playerInformation, globalStats, elementaStuff, hoeStats, collection
 import Settings from "../config";
 
 const Color = Java.type("java.awt.Color");
+const File = Java.type("java.io.File");
 
 function turnToNumber(value) {
     if (value) {
@@ -28,6 +29,63 @@ function turnToNumber(value) {
     } else {
         return 0;
     }
+}
+
+export function createJacobTimerGuiContainer() {
+    if (!Settings.showJacobTimer) return;
+
+    const Field1 = createNewTextElement("", globalStats.timeUntilJacobs);
+
+    console.log(globalStats.nextJacobCrops);
+    console.log(globalStats.nextJacobCrops[0]);
+
+    const file = new File(`config/ChatTriggers/images/${globalStats.nextJacobCrops[0]}.png`);
+    const file2 = new File(`config/ChatTriggers/images/${globalStats.nextJacobCrops[1]}.png`);
+    const file3 = new File(`config/ChatTriggers/images/${globalStats.nextJacobCrops[2]}.png`);
+
+    const image1 = UIImage.Companion.ofFile(file)
+        .setWidth((15).pixels())
+        .setHeight((15).pixels());
+
+    const image2 = UIImage.Companion.ofFile(file2)
+        .setWidth((15).pixels())
+        .setHeight((15).pixels());
+    
+    const image3 = UIImage.Companion.ofFile(file3)
+        .setWidth((15).pixels())
+        .setHeight((15).pixels());
+
+    const mainUIContainer = new UIRoundedRectangle(3)
+        .setX((Settings.jacob_x).pixels())
+        .setY((Settings.jacob_y).pixels())
+        .setWidth(new ChildBasedMaxSizeConstraint())
+        .setHeight(new AdditiveConstraint(new ChildBasedSizeConstraint(), (7).pixels()))
+        .setColor(new ConstantColorConstraint(getJavaColor(new Color(Settings.xpInfoBackgroundColor.getRed()/255, Settings.xpInfoBackgroundColor.getGreen()/255, Settings.xpInfoBackgroundColor.getBlue()/255, Settings.xpInfoBackgroundColor.getAlpha()/255))));
+
+    mainUIContainer.addChildren(Field1);
+    mainUIContainer.addChildren(image1);
+    mainUIContainer.addChildren(image2);
+    mainUIContainer.addChildren(image3);
+
+    if(gui.isOpen()){
+        mainUIContainer.setColor(new ConstantColorConstraint(getJavaColor(new Color(1, 1, 1, 0.2))));
+    }
+
+    mainUIContainer.onMouseEnter((event) => {
+        if(gui.isOpen()){
+            const Mouse = Java.type("org.lwjgl.input.Mouse");
+            Mouse.getNativeCursor();
+            Mouse.poll();
+
+            if(Mouse.isButtonDown(0) && !mouseInformation.toolInfo && !mouseInformation.xpInfo) {
+                mouseInformation.jacob = true;
+            } else {
+                mouseInformation.jacob = false;
+            }
+        } 
+    });
+
+    return mainUIContainer;
 }
 
 export function createXPInfoGuiContainer() {
