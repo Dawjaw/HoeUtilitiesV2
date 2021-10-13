@@ -2,6 +2,8 @@ import { @Vigilant, @TextProperty, @SwitchProperty, @ButtonProperty,
     @NumberProperty, @SelectorProperty, @SliderProperty, @ColorProperty, Color, @ParagraphProperty } from '../Vigilance';
 import gui from './utils/constants';
 
+const Color = Java.type("java.awt.Color");
+
 @Vigilant("HoeUtilitiesV2")
 class Settings {
 
@@ -102,7 +104,7 @@ class Settings {
         category: 'Tools',
         subcategory: 'Customization',
     })
-    toolInfoBackgroundColor = Color.WHITE;
+    toolInfoBackgroundColor = new Color(0,0,0,50/255);
 
     @SelectorProperty({
         name: "Text Alignment",
@@ -129,7 +131,7 @@ class Settings {
         subcategory: 'GUI',
         hidden: true
     })
-    tool_gui_x = 50;
+    tool_gui_x = 25;
 
     @NumberProperty({
         name: "ToolInfoY",
@@ -137,7 +139,7 @@ class Settings {
         subcategory: 'GUI',
         hidden: true
     })
-    tool_gui_y = 50;
+    tool_gui_y = 25;
 
     //-----------------------------------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------
@@ -157,7 +159,7 @@ class Settings {
         category: 'XP',
         subcategory: 'Customization',
     })
-    xpInfoBackgroundColor = Color.BLUE;
+    xpInfoBackgroundColor = new Color(0,0,0,50/255);
 
     @SelectorProperty({
         name: "Text Alignment",
@@ -184,7 +186,7 @@ class Settings {
         subcategory: 'GUI',
         hidden: true
     })
-    xp_gui_x = 100;
+    xp_gui_x = 25;
 
     @NumberProperty({
         name: "XPInfoY",
@@ -192,7 +194,7 @@ class Settings {
         subcategory: 'GUI',
         hidden: true
     })
-    xp_gui_y = 100;
+    xp_gui_y = 125;
 
     //-----------------------------------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------
@@ -381,6 +383,13 @@ class Settings {
         hidden: true
     })
     apiKey = "";
+
+    @SwitchProperty({
+        name: "FirstRun",
+        category: "General",
+        hidden: true
+    })
+    firstRun = false;
 
     constructor() {
         this.initialize(this);

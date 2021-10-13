@@ -31,6 +31,19 @@ function turnToNumber(value) {
     }
 }
 
+export function createImage() {
+    console.log(globalStats.nextJacobCrops);
+    console.log(globalStats.jacobEvents);
+
+    var file = new File("config/ChatTriggers/images/carrot.png");
+    var image1 = UIImage.Companion.ofFile(file)
+        .setX((100).pixels())
+        .setY((100).pixels())
+        .setWidth((15).pixels())
+        .setHeight((15).pixels());
+    return image1;
+}
+
 export function createJacobTimerGuiContainer() {
     if (!Settings.showJacobTimer) return;
 

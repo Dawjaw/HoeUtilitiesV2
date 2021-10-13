@@ -1,7 +1,10 @@
+/// <reference types="../CTAutocomplete" />
+/// <reference lib="es2015" />
+
 import Settings from "./config";
 import gui, {npcPricing, blockToMCBlockName, bazaarFarmingCompression, playerInformation, farmingBlockTypes, hoeStats, collection, globalStats} from './utils/constants';
 import {initializeToolInfo, renderToolInfo} from "./displays/toolInfo";
-import {updateElementaGUI} from "./displays/elementaDisplay";
+import {getToolInfoWindow, getXpInfoWindow, getJacobTimerWindow} from "./displays/elementaDisplay";
 import {aggregateFarmingFortune, updateGlobalFarmingStats, updateHoeStats} from "./updateInformation";
 import {getApiData, getBazaarData, getJacobEvents} from "./utils/getApiData";
 import {addCommas, memorySizeOf, addCropDrop, checkInput, getCropDrop, resetGlobalFarmingInformation, updateSetting} from "./utils/utils";
@@ -9,6 +12,9 @@ import {initializeXpInfo, renderXpInfo} from "./displays/xpInfo";
 import {guiMover, initiateGuiMover} from "./displays/guiMover";
 import {calculateXpPerHour} from "./features/xpPerHour";
 import {calculateYieldPerHour} from "./features/yield";
+import {
+    Window
+} from "Elementa/index";
 
 // init variables
 let API_C = { SUGAR_CANE: "",
@@ -60,6 +66,38 @@ let cropIncomeLast = undefined;
 
 let lastCropAmount = 0;
 
+let preload = 0;
+const mainWindow = new Window();
+let toolInfoWindow = getToolInfoWindow();
+let xpInfoWindow = getXpInfoWindow();
+let jacobTimerWindow = getJacobTimerWindow();
+
+function guiPreload(){
+    if(xpInfoWindow !==  undefined && preload === 0){
+        mainWindow.addChildren(toolInfoWindow, xpInfoWindow);
+        preload = 1;
+    } else {
+        toolInfoWindow = getToolInfoWindow();
+        xpInfoWindow = getXpInfoWindow();
+    }
+}
+
+
+if(!Settings.firstRun) {
+    ChatLib.chat("§eThank you for downloading HoeUtilitiesV2!");
+    ChatLib.chat("§aType §6/hu2 §ato open the Settings menu.");
+    ChatLib.chat("§aType §6/hu2 help §ato see a list of commands.");
+    ChatLib.chat("§aType §6/hu2 gui §ato move the gui around.");
+    ChatLib.chat("§aType §6/hu2debug §ato print out a breakdown of your farming fortune.");
+    ChatLib.chat("§aCertain features might not work if you haven't set your api key yet!");
+    const clickableMessage = new Message(
+        "§aIf you have any issues, please report them on the ",
+         new TextComponent("github page.").setClick("open_url", "https://github.com/Dawjaw/HoeUtilitiesV2"),
+          "."
+      );
+      ChatLib.chat(clickableMessage);
+}
+
 //commands
 register("command", () => printDebugInfo()).setName("hu2debug");
 
@@ -72,9 +110,19 @@ register("command", (arg1, arg2) => {
         Settings.apiKey = arg2;
         updateSetting("apikey", `"${arg2}"`);
         ChatLib.chat("§eSet api key!")
+        ChatLib.command("ct load", true);
     } else if (arg1 === "key" && arg2 === undefined) ChatLib.chat("§eInvalid command usage or invalid key");
     if (arg1 === "help") {
-
+        ChatLib.chat("§aType §6/hu2 §ato open the Settings menu.");
+        ChatLib.chat("§aType §6/hu2 help §ato see a list of commands.");
+        ChatLib.chat("§aType §6/hu2 gui §ato move the gui around.");
+        ChatLib.chat("§aType §6/hu2debug §ato print out a breakdown of your farming fortune.");
+        const clickableMessage = new Message(
+            "§aIf you have any issues, please report them on the ",
+             new TextComponent("github page.").setClick("open_url", "https://github.com/Dawjaw/HoeUtilitiesV2"),
+              "."
+          );
+          ChatLib.chat(clickableMessage);
     }
 }).setName("hu2");
 
@@ -82,6 +130,7 @@ register('chat', (key) => {
     Settings.apiKey = key;
     updateSetting("apikey", `"${key}"`);
     ChatLib.chat("§eSet api key!")
+    ChatLib.command("ct load", true);
 }).setCriteria("Your new API key is ${key}");
 
 // api
@@ -94,25 +143,44 @@ export let toolInfo = initializeToolInfo();
 export let xpInfo = initializeXpInfo();
 
 // cache images 
-const image1 = new Image("carrot.png", "https://jacobs.jeanlaurent.fr/assets/img/carrot.png");
-const image2 = new Image("melon.png", "https://jacobs.jeanlaurent.fr/assets/img/melon.png");
-const image3 = new Image("cocoa.png", "https://jacobs.jeanlaurent.fr/assets/img/cocoa_beans.png");
-const image4 = new Image("pumpkin.png", "https://jacobs.jeanlaurent.fr/assets/img/pumpkin.png");
-const image5 = new Image("cane.png", "https://jacobs.jeanlaurent.fr/assets/img/sugar_cane.png");
-const image6 = new Image("cactus.png", "https://jacobs.jeanlaurent.fr/assets/img/cactus.png");
-const image7 = new Image("potato.png", "https://jacobs.jeanlaurent.fr/assets/img/potato.png");
-const image8 = new Image("mushroom.png", "https://jacobs.jeanlaurent.fr/assets/img/mushroom.png");
-const image9 = new Image("wheat.png", "https://jacobs.jeanlaurent.fr/assets/img/wheat.png");
-const image10 = new Image("wart.png", "https://jacobs.jeanlaurent.fr/assets/img/nether_wart.png");
+if(!Settings.firstRun) {
+    const image1 = new Image("carrot.png", "https://jacobs.jeanlaurent.fr/assets/img/carrot.png");
+    const image2 = new Image("melon.png", "https://jacobs.jeanlaurent.fr/assets/img/melon.png");
+    const image3 = new Image("cocoa.png", "https://jacobs.jeanlaurent.fr/assets/img/cocoa_beans.png");
+    const image4 = new Image("pumpkin.png", "https://jacobs.jeanlaurent.fr/assets/img/pumpkin.png");
+    const image5 = new Image("cane.png", "https://jacobs.jeanlaurent.fr/assets/img/sugar_cane.png");
+    const image6 = new Image("cactus.png", "https://jacobs.jeanlaurent.fr/assets/img/cactus.png");
+    const image7 = new Image("potato.png", "https://jacobs.jeanlaurent.fr/assets/img/potato.png");
+    const image8 = new Image("mushroom.png", "https://jacobs.jeanlaurent.fr/assets/img/mushroom.png");
+    const image9 = new Image("wheat.png", "https://jacobs.jeanlaurent.fr/assets/img/wheat.png");
+    const image10 = new Image("wart.png", "https://jacobs.jeanlaurent.fr/assets/img/nether_wart.png");
+}
+
+updateSetting("firstrun", true);
 
 // gui move
 initiateGuiMover(toolInfo, xpInfo);
 register('renderOverlay', guiMover);
 register("renderOverlay", () => {
-    if (!Settings.showLegacyGUI){
-        updateElementaGUI();
-    }
-}).setPriority(Priority.LOWEST);
+    if(preload === 1){
+        if(playerInformation.toolIsEquipped && !Settings.showLegacyGUI) {
+            mainWindow.removeChild(toolInfoWindow);
+            mainWindow.removeChild(xpInfoWindow);
+            if (Settings.showToolInfo) {
+                toolInfoWindow = getToolInfoWindow();
+                mainWindow.addChild(toolInfoWindow);
+            } 
+            if (Settings.showXpInfo){
+                xpInfoWindow = getXpInfoWindow();
+                mainWindow.addChild(xpInfoWindow);
+            }
+            mainWindow.draw();
+        } else { 
+            mainWindow.removeChild(toolInfoWindow);
+            mainWindow.removeChild(xpInfoWindow); 
+        }
+    } 
+});
 
 
 let tickStep = 0;
@@ -181,11 +249,11 @@ register('step', () => {
                     eventString.push(crop);
                 });
                 globalStats.nextJacobCrops = eventString;
-                //console.log(humanDateFormat, minutes, seconds);
                 break;
             }
         }
     }
+    if(preload === 0) guiPreload();
 }).setDelay(1);
 
 register('step', () => {
@@ -351,8 +419,8 @@ function calculateCoinsPerHour(){
             bountifulBonus = (c1 * 20 * 60 * 60);
         }
         cropIncome = cropGain;
-        totalcropIncome = addCommas(Math.round(cropGain + bountifulBonus));
-        globalStats.cropGain = totalcropIncome;
+        let totalCropIncome = addCommas(Math.round(cropGain + bountifulBonus));
+        globalStats.cropGain = totalCropIncome;
         cropIncomeLast = Date.now();
     }
 }
