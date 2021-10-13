@@ -3,6 +3,6 @@
   "author": "Dawjaw",
   "entry": "index.js",
   "requires": ["Vigilance", "requestV2", "PromiseV2", "Elementa"],
-  "description": "Rework of the popular module HoeUtilities by joker876",
+  "description": "Rework of the popular module HoeUtilities.",
   "version": "1.0.0"
 }
