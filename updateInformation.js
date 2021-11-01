@@ -112,6 +112,7 @@ export function aggregateFarmingFortune() {
 }
 
 export function updateGlobalFarmingStats(xpPerHour) {
+    if(!World.isLoaded()) return;
     // get FFD
     const heldItem = Player.getHeldItem().getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
     globalStats.fFD = heldItem.getInteger('farming_for_dummies_count');
@@ -130,9 +131,8 @@ export function updateGlobalFarmingStats(xpPerHour) {
     });
 
     // get Xp info
-    TabList.getNames()?.forEach(name => {
+    TabList.getNames().forEach(name => {
         try {
-            if (!name) return;
             if (name.includes("Skills") && name.includes("Farming") && globalStats.currentXP !== undefined) {
                 if (globalStats.oldPercentage !== Number(parseFloat(ChatLib.removeFormatting(globalStats.currentXP)) / 100)) {
                     if (globalStats.farmingLevel === undefined) globalStats.farmingLevel = Number(name.split(" ")[2].replace(":", ""));

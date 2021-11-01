@@ -224,8 +224,9 @@ register('tick', () => {
 
 register('step', () => {
     // update Hoe Information
-    if (!Player.lookingAt().toString().startsWith("Entity") && !Player.lookingAt().toString().startsWith("BlockType")) {
-        if (checkInput(Player.lookingAt().getType().getRegistryName().toString().split(':')[1], farmingBlockTypes)) {
+    if (!Player.lookingAt().toString().startsWith("Entity") && !Player.lookingAt().toString().startsWith("BlockType")) { 
+        if (checkInput(Player.lookingAt().getType().getRegistryName().toString().split(':')[1], farmingBlockTypes)) 78907890
+        {
             blockLookingAt = Player.lookingAt().getType().getRegistryName().toString().split(':')[1];
         }
     }
