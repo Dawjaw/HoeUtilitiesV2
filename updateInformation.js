@@ -112,14 +112,13 @@ export function aggregateFarmingFortune() {
 }
 
 export function updateGlobalFarmingStats(xpPerHour) {
-
     // get FFD
     const heldItem = Player.getHeldItem().getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
     globalStats.fFD = heldItem.getInteger('farming_for_dummies_count');
 
     // get Elephant level
     let playerName = Player.getName();
-    World.getAllEntities().forEach(pet => {
+    World.getAllEntities()?.forEach(pet => {
         if (pet.getName() === undefined || pet.getName() === null) return;
         pet = ChatLib.removeFormatting(pet.getName());
         if (pet.includes(playerName) && pet.includes("Elephant")) {
@@ -128,25 +127,32 @@ export function updateGlobalFarmingStats(xpPerHour) {
         else {
             globalStats.elephant = globalStats.apiElephantLevel * 1.8;
         }
-    })
+    });
 
     // get Xp info
-    TabList.getNames().forEach(name => {
-        if (name.includes("Skills") && name.includes("Farming") && globalStats.currentXP !== undefined) {
-            if (globalStats.oldPercentage !== Number(parseFloat(ChatLib.removeFormatting(globalStats.currentXP)) / 100)) {
-                if (globalStats.farmingLevel === undefined) globalStats.farmingLevel = Number(name.split(" ")[2].replace(":", ""));
-                let currentLevel = Number(name.split(" ")[2].replace(":", ""));
-                let percentage = Number(parseFloat(ChatLib.removeFormatting(globalStats.currentXP)) / 100);
-                globalStats.oldPercentage = percentage;
-                let xpTotalXPForNextLevel = skillCurves[currentLevel];
-                let xpRequiredForNextLevel = skillCurves[currentLevel] - skillCurves[currentLevel - 1];
+    TabList.getNames()?.forEach(name => {
+        try {
+            if (!name) return;
+            if (name.includes("Skills") && name.includes("Farming") && globalStats.currentXP !== undefined) {
+                if (globalStats.oldPercentage !== Number(parseFloat(ChatLib.removeFormatting(globalStats.currentXP)) / 100)) {
+                    if (globalStats.farmingLevel === undefined) globalStats.farmingLevel = Number(name.split(" ")[2].replace(":", ""));
+                    let currentLevel = Number(name.split(" ")[2].replace(":", ""));
+                    let percentage = Number(parseFloat(ChatLib.removeFormatting(globalStats.currentXP)) / 100);
+                    globalStats.oldPercentage = percentage;
+                    let xpTotalXPForNextLevel = skillCurves[currentLevel];
+                    let xpRequiredForNextLevel = skillCurves[currentLevel] - skillCurves[currentLevel - 1];
 
-                globalStats.currentLevel = currentLevel;
-                globalStats.currentLevelXP = (xpRequiredForNextLevel !== undefined && xpRequiredForNextLevel !== NaN) ? Math.round(xpRequiredForNextLevel * percentage) : globalStats.currentXP;
-                globalStats.xpRequiredForNextLevel = xpRequiredForNextLevel;
-                globalStats.xpUntilNextLevel = xpRequiredForNextLevel - globalStats.currentLevelXP
+                    globalStats.currentLevel = currentLevel;
+                    globalStats.currentLevelXP = (xpRequiredForNextLevel !== undefined && xpRequiredForNextLevel !== NaN) ? Math.round(xpRequiredForNextLevel * percentage) : globalStats.currentXP;
+                    globalStats.xpRequiredForNextLevel = xpRequiredForNextLevel;
+                    globalStats.xpUntilNextLevel = xpRequiredForNextLevel - globalStats.currentLevelXP
+                }
+                globalStats.xpPerHourExpected = (globalStats.xpGained * 20 * 60 * 60);
             }
-            globalStats.xpPerHourExpected = (globalStats.xpGained * 20 * 60 * 60);
+        } catch (e) {
+            console.log("Error", e.stack);
+            console.log("Error", e.name);
+            console.log("Error", e.message);
         }
     });
 

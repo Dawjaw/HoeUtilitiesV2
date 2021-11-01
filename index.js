@@ -2,32 +2,33 @@
 /// <reference lib="es2015" />
 
 import Settings from "./config";
-import gui, {npcPricing, blockToMCBlockName, bazaarFarmingCompression, playerInformation, farmingBlockTypes, hoeStats, collection, globalStats} from './utils/constants';
-import {initializeToolInfo, renderToolInfo} from "./displays/toolInfo";
-import {getToolInfoWindow, getXpInfoWindow, getJacobTimerWindow} from "./displays/elementaDisplay";
-import {aggregateFarmingFortune, updateGlobalFarmingStats, updateHoeStats} from "./updateInformation";
-import {getApiData, getBazaarData, getJacobEvents} from "./utils/getApiData";
-import {addCommas, memorySizeOf, addCropDrop, checkInput, getCropDrop, resetGlobalFarmingInformation, updateSetting} from "./utils/utils";
-import {initializeXpInfo, renderXpInfo} from "./displays/xpInfo";
-import {guiMover, initiateGuiMover} from "./displays/guiMover";
-import {calculateXpPerHour} from "./features/xpPerHour";
-import {calculateYieldPerHour} from "./features/yield";
+import gui, { npcPricing, blockToMCBlockName, bazaarFarmingCompression, playerInformation, farmingBlockTypes, hoeStats, collection, globalStats } from './utils/constants';
+import { initializeToolInfo, renderToolInfo } from "./displays/toolInfo";
+import { getToolInfoWindow, getXpInfoWindow, getJacobTimerWindow } from "./displays/elementaDisplay";
+import { aggregateFarmingFortune, updateGlobalFarmingStats, updateHoeStats } from "./updateInformation";
+import { getApiData, getBazaarData, getJacobEvents } from "./utils/getApiData";
+import { addCommas, memorySizeOf, addCropDrop, checkInput, getCropDrop, resetGlobalFarmingInformation, updateSetting } from "./utils/utils";
+import { initializeXpInfo, renderXpInfo } from "./displays/xpInfo";
+import { guiMover, initiateGuiMover } from "./displays/guiMover";
+import { calculateXpPerHour } from "./features/xpPerHour";
+import { calculateYieldPerHour } from "./features/yield";
 import {
     Window
 } from "Elementa/index";
 
 // init variables
-let API_C = { SUGAR_CANE: "",
-                POTATO_ITEM: "",
-                CARROT_ITEM: "",
-                WHEAT: "",
-                NETHER_STALK: "",
-                PUMPKIN: "",
-                MELON: "",
-                'INK_SACK:3': "",
-                MUSHROOM_COLLECTION: "",
-                CACTUS: ""
-            };
+let API_C = {
+    SUGAR_CANE: "",
+    POTATO_ITEM: "",
+    CARROT_ITEM: "",
+    WHEAT: "",
+    NETHER_STALK: "",
+    PUMPKIN: "",
+    MELON: "",
+    'INK_SACK:3': "",
+    MUSHROOM_COLLECTION: "",
+    CACTUS: ""
+};
 
 let bazaarObject = {
     'cocoa': 0,
@@ -72,8 +73,8 @@ let toolInfoWindow = getToolInfoWindow();
 let xpInfoWindow = getXpInfoWindow();
 let jacobTimerWindow = getJacobTimerWindow();
 
-function guiPreload(){
-    if(xpInfoWindow !==  undefined && preload === 0){
+function guiPreload() {
+    if (xpInfoWindow !== undefined && preload === 0) {
         mainWindow.addChildren(toolInfoWindow, xpInfoWindow);
         preload = 1;
     } else {
@@ -83,7 +84,7 @@ function guiPreload(){
 }
 
 
-if(!Settings.firstRun) {
+if (!Settings.firstRun) {
     ChatLib.chat("§eThank you for downloading HoeUtilitiesV2!");
     ChatLib.chat("§aType §6/hu2 §ato open the Settings menu.");
     ChatLib.chat("§aType §6/hu2 help §ato see a list of commands.");
@@ -92,10 +93,10 @@ if(!Settings.firstRun) {
     ChatLib.chat("§aCertain features might not work if you haven't set your api key yet!");
     const clickableMessage = new Message(
         "§aIf you have any issues, please report them on the ",
-         new TextComponent("github page.").setClick("open_url", "https://github.com/Dawjaw/HoeUtilitiesV2"),
-          "."
-      );
-      ChatLib.chat(clickableMessage);
+        new TextComponent("github page.").setClick("open_url", "https://github.com/Dawjaw/HoeUtilitiesV2"),
+        "."
+    );
+    ChatLib.chat(clickableMessage);
 }
 
 //commands
@@ -119,10 +120,10 @@ register("command", (arg1, arg2) => {
         ChatLib.chat("§aType §6/hu2debug §ato print out a breakdown of your farming fortune.");
         const clickableMessage = new Message(
             "§aIf you have any issues, please report them on the ",
-             new TextComponent("github page.").setClick("open_url", "https://github.com/Dawjaw/HoeUtilitiesV2"),
-              "."
-          );
-          ChatLib.chat(clickableMessage);
+            new TextComponent("github page.").setClick("open_url", "https://github.com/Dawjaw/HoeUtilitiesV2"),
+            "."
+        );
+        ChatLib.chat(clickableMessage);
     }
 }).setName("hu2");
 
@@ -143,7 +144,7 @@ export let toolInfo = initializeToolInfo();
 export let xpInfo = initializeXpInfo();
 
 // cache images 
-if(!Settings.firstRun) {
+if (!Settings.firstRun) {
     const image1 = new Image("carrot.png", "https://jacobs.jeanlaurent.fr/assets/img/carrot.png");
     const image2 = new Image("melon.png", "https://jacobs.jeanlaurent.fr/assets/img/melon.png");
     const image3 = new Image("cocoa.png", "https://jacobs.jeanlaurent.fr/assets/img/cocoa_beans.png");
@@ -162,24 +163,31 @@ updateSetting("firstrun", true);
 initiateGuiMover(toolInfo, xpInfo);
 register('renderOverlay', guiMover);
 register("renderOverlay", () => {
-    if(preload === 1){
-        if(playerInformation.toolIsEquipped && !Settings.showLegacyGUI) {
-            mainWindow.removeChild(toolInfoWindow);
-            mainWindow.removeChild(xpInfoWindow);
-            if (Settings.showToolInfo) {
-                toolInfoWindow = getToolInfoWindow();
-                mainWindow.addChild(toolInfoWindow);
-            } 
-            if (Settings.showXpInfo){
-                xpInfoWindow = getXpInfoWindow();
-                mainWindow.addChild(xpInfoWindow);
+    try {
+        if (preload === 1) {
+            if (playerInformation.toolIsEquipped && !Settings.showLegacyGUI) {
+                mainWindow.removeChild(toolInfoWindow);
+                mainWindow.removeChild(xpInfoWindow);
+                if (Settings.showToolInfo) {
+                    toolInfoWindow = getToolInfoWindow();
+                    mainWindow.addChild(toolInfoWindow);
+                }
+                if (Settings.showXpInfo) {
+                    xpInfoWindow = getXpInfoWindow();
+                    mainWindow.addChild(xpInfoWindow);
+                }
+                mainWindow.draw();
+            } else {
+                mainWindow.removeChild(toolInfoWindow);
+                mainWindow.removeChild(xpInfoWindow);
             }
-            mainWindow.draw();
-        } else { 
-            mainWindow.removeChild(toolInfoWindow);
-            mainWindow.removeChild(xpInfoWindow); 
         }
-    } 
+
+    } catch (e) {
+        console.log("Error", e.stack);
+        console.log("Error", e.name);
+        console.log("Error", e.message);
+    }
 });
 
 
@@ -216,28 +224,45 @@ register('tick', () => {
 
 register('step', () => {
     // update Hoe Information
-    try {
-        if(!Player.lookingAt().toString().startsWith("Entity")){
-            if (checkInput(Player.lookingAt().getRegistryName().toString().split(':')[1], farmingBlockTypes)) {
-                blockLookingAt = Player.lookingAt().getRegistryName().toString().split(':')[1];
+    if (!Player.lookingAt().toString().startsWith("Entity") && !Player.lookingAt().toString().startsWith("BlockType")) {
+        if (checkInput(Player.lookingAt().getType().getRegistryName().toString().split(':')[1], farmingBlockTypes)) {
+            blockLookingAt = Player.lookingAt().getType().getRegistryName().toString().split(':')[1];
         }
     }
-        
-    } catch (e) {
-        console.log(e);
-    }
+
     resetGlobalFarmingInformation();
     if (playerInformation.toolIsEquipped) {
         updateHoeStats();
     }
+
     updateGlobalFarmingStats(xpPerHour);
     aggregateFarmingFortune();
     resetLiveCounters();
-    if(globalStats.jacobEvents !== undefined){
+    handleJacobsEvents();
+
+    if (preload === 0) guiPreload();
+}).setDelay(1);
+
+register('step', () => {
+    if (World.isLoaded()) {
+        API_C = getApiData(API_C);
+    }
+}).setDelay(90);
+
+register('step', () => {
+    if (World.isLoaded()) {
+        bazaarObject = getBazaarData(bazaarObject);
+    }
+    getJacobEvents();
+}).setDelay(240);
+
+function handleJacobsEvents() {
+    if (globalStats.jacobEvents !== undefined) {
         for (jEvent of globalStats.jacobEvents) {
             let currentTime = Math.floor((new Date()).getTime() / 1000);
             let eventTime = jEvent['time'];
             if (currentTime < eventTime) {
+                console.log("this shouldnt be printed in console!");
                 let dateObject = new Date(eventTime * 1000);
                 let humanDateFormat = dateObject.toLocaleString()
                 let delta = eventTime - currentTime;
@@ -253,51 +278,39 @@ register('step', () => {
             }
         }
     }
-    if(preload === 0) guiPreload();
-}).setDelay(1);
-
-register('step', () => {
-    if(World.isLoaded()){
-        API_C = getApiData(API_C);
-    }
-}).setDelay(90);
-
-register('step', () => {
-    if(World.isLoaded()){
-        bazaarObject = getBazaarData(bazaarObject);
-    }
-    getJacobEvents();
-}).setDelay(240);
+}
 
 // waiting for ct 2.0 to get fixed
-/* 
+ 
 let C07PacketPlayerDigging = Java.type("net.minecraft.network.play.client.C07PacketPlayerDigging").class.toString();
 register('packetSent', (packet, event) => {
     try {
         if(packet.class.toString().equals(C07PacketPlayerDigging)) {
             let status = packet.func_180762_c();
             if (status.toString() === "START_DESTROY_BLOCK") {
+                /*
                 calculateCoinsPerHour();
                 handleYieldPerHour();
                 handleXPPerHour();
                 addCropDrop(blockLookingAt);
-                blockLookingAt = "air";
+                blockLookingAt = "air";*/
             }
         }
     } catch (e) {
-        console.log("hypixel is bowo");
-        console.log(e);
+        console.log("Error", e.stack);
+        console.log("Error", e.name);
+        console.log("Error", e.message);
     }   
 });
-*/
 
-function printMemoryUsage(){
+
+function printMemoryUsage() {
     console.log(`Memory Size overview:`);
     console.log(`Collection: ${memorySizeOf(collection)}`);
     console.log(`Hoe Information: ${memorySizeOf(hoeStats)}`);
     console.log(`Player Information: ${memorySizeOf(globalStats)}`);
     console.log(`Block buffer: ${memorySizeOf(alreadyBrokenList)}`);
-    let mobj = {collection, hoeStats, globalStats, alreadyBrokenList};
+    let mobj = { collection, hoeStats, globalStats, alreadyBrokenList };
     console.log(`total: ${memorySizeOf(mobj)}`);
     delete mobj;
 }
@@ -326,8 +339,8 @@ register('packetReceived', (packet, event) => {
                     reduced = true;
                     return;
                 }*/
-                if(nonFarmingDingSoundCounter > 0) {
-                    if(!reduced) {
+                if (nonFarmingDingSoundCounter > 0) {
+                    if (!reduced) {
                         nonFarmingDingSoundCounter--;
                         return;
                     }
@@ -359,25 +372,25 @@ register('packetReceived', (packet, event) => {
 });
 */
 
-function getAmount(){
+function getAmount() {
     let temp = 0;
     for (let i = 0; i < 36; i++) {
         let is = Player.getInventory().getStackInSlot(i);
-        if (is == null){
+        if (is == null) {
             i++;
             return;
         }
-        if(is.getName().includes(blockToMCBlockName[playerInformation.crop])){
+        if (is.getName().includes(blockToMCBlockName[playerInformation.crop])) {
             temp += is.getStackSize();
         }
-        
+
     }
     return temp;
 }
 
-function handleXPPerHour(){
-    if(globalStats.xpGained !== undefined) {
-        if(startXpPerHour === undefined) {
+function handleXPPerHour() {
+    if (globalStats.xpGained !== undefined) {
+        if (startXpPerHour === undefined) {
             startXpPerHour = Date.now();
         }
         totalXP += parseFloat(ChatLib.removeFormatting(globalStats.xpGained));
@@ -385,36 +398,36 @@ function handleXPPerHour(){
     }
 }
 
-function resetLiveCounters(){
-    if(((Date.now()/1000) - (lastXpPerHour/1000)) > 30) {
+function resetLiveCounters() {
+    if (((Date.now() / 1000) - (lastXpPerHour / 1000)) > 30) {
         totalXP = 0;
         startXpPerHour = undefined;
         xpPerHour = undefined;
         globalStats.xpPerHourExpected = undefined;
         globalStats.xpGained = 0;
     }
-    if(((Date.now()/1000) - (lastYieldPerHour/1000)) > 30) {
+    if (((Date.now() / 1000) - (lastYieldPerHour / 1000)) > 30) {
         totalYield = 0;
         lastBlockFarmed = undefined;
         startYieldPerHour = undefined;
         lastToolUsed = undefined;
     }
-    if(((Date.now()/1000) - (cropIncomeLast/1000)) > 15) {
+    if (((Date.now() / 1000) - (cropIncomeLast / 1000)) > 15) {
         cropIncome = 0;
         cropIncomeLast = undefined;
         cropIncomeStart = undefined;
     }
 }
 
-function calculateCoinsPerHour(){
-    if(bazaarObject[playerInformation.crop] && bazaarObject[playerInformation.crop] && yieldPerHour ) {
-        if(!cropIncomeStart) cropIncomeStart = Date.now();
+function calculateCoinsPerHour() {
+    if (bazaarObject[playerInformation.crop] && bazaarObject[playerInformation.crop] && yieldPerHour) {
+        if (!cropIncomeStart) cropIncomeStart = Date.now();
         let enchDrops = Number(yieldPerHour.split(",").join("")) / Number(bazaarFarmingCompression[playerInformation.crop]);
         let cropPrice = (npcPricing[playerInformation.crop] >= bazaarObject[playerInformation.crop]) ? npcPricing[playerInformation.crop] : bazaarObject[playerInformation.crop];
         let cropGain = enchDrops * cropPrice;
         let drops = getCropDrop(playerInformation.crop);
         let bountifulBonus = 0;
-        if(hoeStats.bountiful) {
+        if (hoeStats.bountiful) {
             let c1 = drops * 0.2;
             bountifulBonus = (c1 * 20 * 60 * 60);
         }
@@ -426,19 +439,19 @@ function calculateCoinsPerHour(){
 }
 
 function handleYieldPerHour() {
-    if(lastBlockFarmed === undefined) {
-        if(blockLookingAt === "air") return;
+    if (lastBlockFarmed === undefined) {
+        if (blockLookingAt === "air") return;
         lastBlockFarmed = blockLookingAt;
         startYieldPerHour = Date.now();
         lastToolUsed = playerInformation.crop;
     }
-    if(lastToolUsed !== playerInformation.crop) {
+    if (lastToolUsed !== playerInformation.crop) {
         totalYield = 0;
         lastBlockFarmed = undefined;
         startYieldPerHour = undefined;
         lastToolUsed = undefined;
     }
-    if(lastToolUsed !== undefined && lastBlockFarmed !== undefined) {
+    if (lastToolUsed !== undefined && lastBlockFarmed !== undefined) {
         totalYield += getCropDrop(playerInformation.crop);
         lastYieldPerHour = Date.now();
     }

@@ -23,6 +23,20 @@ export function getApiData(API_C) {
             ChatLib.chat("§ePlease set your api key by generating a new key with §b/api new §eor using §b/hu2 key yourkey §e!");
             return API_C;
         }
+        if (API_C === undefined) {
+            API_C = {
+                SUGAR_CANE: "",
+                POTATO_ITEM: "",
+                CARROT_ITEM: "",
+                WHEAT: "",
+                NETHER_STALK: "",
+                PUMPKIN: "",
+                MELON: "",
+                'INK_SACK:3': "",
+                MUSHROOM_COLLECTION: "",
+                CACTUS: ""
+            };
+        }
 
         let uuid = Player.getUUID();
         let shortUUID = uuid.split("-").join("");
@@ -48,21 +62,29 @@ export function getApiData(API_C) {
                 API_N = (profile_in_use.collection !== undefined) ? profile_in_use.collection : undefined;
 
                 try {
-                    // set collections/update only updates if there are new values
-                    collection.cane = (API_N.SUGAR_CANE !== API_C.SUGAR_CANE) ? API_N.SUGAR_CANE : API_C.SUGAR_CANE;
-                    collection.potato = (API_N.POTATO_ITEM !== API_C.POTATO_ITEM) ? API_N.POTATO_ITEM : API_C.POTATO_ITEM;
-                    collection.carrot = (API_N.CARROT_ITEM !== API_C.CARROT_ITEM) ? API_N.CARROT_ITEM : API_C.CARROT_ITEM;
-                    collection.wheat = (API_N.WHEAT !== API_C.WHEAT) ? API_N.WHEAT : API_C.WHEAT;
-                    collection.wart = (API_N.NETHER_STALK !== API_C.NETHER_STALK) ? API_N.NETHER_STALK : API_C.NETHER_STALK;
-                    collection.pumpkin = (API_N.PUMPKIN !== API_C.PUMPKIN) ? API_N.PUMPKIN : API_C.PUMPKIN;
-                    collection.melon = (API_N.MELON !== API_C.MELON) ? API_N.MELON : API_C.MELON;
-                    collection.cocoa = (API_N['INK_SACK:3'] !== API_C['INK_SACK:3']) ? API_N['INK_SACK:3'] : API_C['INK_SACK:3'];
-                    collection.mushroom = (API_N.MUSHROOM_COLLECTION !== API_C.MUSHROOM_COLLECTION) ? API_N.MUSHROOM_COLLECTION : API_C.MUSHROOM_COLLECTION;
-                    collection.cactus = (API_N.CACTUS !== API_C.CACTUS) ? API_N.CACTUS : API_C.CACTUS;
+                    if (API_N !== undefined) {
+                        // set collections/update only updates if there are new values
+                        collection.cane = (API_N.SUGAR_CANE !== API_C.SUGAR_CANE) ? API_N.SUGAR_CANE : API_C.SUGAR_CANE;
+                        collection.potato = (API_N.POTATO_ITEM !== API_C.POTATO_ITEM) ? API_N.POTATO_ITEM : API_C.POTATO_ITEM;
+                        collection.carrot = (API_N.CARROT_ITEM !== API_C.CARROT_ITEM) ? API_N.CARROT_ITEM : API_C.CARROT_ITEM;
+                        collection.wheat = (API_N.WHEAT !== API_C.WHEAT) ? API_N.WHEAT : API_C.WHEAT;
+                        collection.wart = (API_N.NETHER_STALK !== API_C.NETHER_STALK) ? API_N.NETHER_STALK : API_C.NETHER_STALK;
+                        collection.pumpkin = (API_N.PUMPKIN !== API_C.PUMPKIN) ? API_N.PUMPKIN : API_C.PUMPKIN;
+                        collection.melon = (API_N.MELON !== API_C.MELON) ? API_N.MELON : API_C.MELON;
+                        collection.cocoa = (API_N['INK_SACK:3'] !== API_C['INK_SACK:3']) ? API_N['INK_SACK:3'] : API_C['INK_SACK:3'];
+                        collection.mushroom = (API_N.MUSHROOM_COLLECTION !== API_C.MUSHROOM_COLLECTION) ? API_N.MUSHROOM_COLLECTION : API_C.MUSHROOM_COLLECTION;
+                        collection.cactus = (API_N.CACTUS !== API_C.CACTUS) ? API_N.CACTUS : API_C.CACTUS;
+                    }
                 } catch (e) {
-
+                    console.log("Error", e.stack);
+                    console.log("Error", e.name);
+                    console.log("Error", e.message);
+                    console.log(JSON.stringify(API_N));
+                    console.log(JSON.stringify(API_C));
                 }
-                API_C = API_N;
+                if (API_N !== undefined) {
+                    API_C = API_N;
+                }
 
                 globalStats.farmingExpCap = (profile_in_use.experience_skill_farming !== undefined) ? profile_in_use.experience_skill_farming : undefined;
 
@@ -92,8 +114,9 @@ export function getApiData(API_C) {
             }).catch((e => console.log(e)));
 
     } catch (e) {
-        console.log(e);
-        console.log(e.stack);
+        console.log("Error", e.stack);
+        console.log("Error", e.name);
+        console.log("Error", e.message);
     }
 
 }
