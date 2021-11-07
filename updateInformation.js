@@ -1,5 +1,5 @@
 import Settings from "./config";
-import { toolIds, playerInformation, turboEnchants, rarities, skillCurves, hoeStats, globalStats, bountiful } from "./utils/constants";
+import { toolToTurboEnchant, playerInformation, turboEnchants, rarities, skillCurves, hoeStats, globalStats, bountiful } from "./utils/constants";
 import { addCommas } from "./utils/utils";
 
 function checkInput(input, words) {
@@ -62,13 +62,11 @@ export function updateHoeStats() {
     }
 
     // Turbo
-    if (checkInput(heldItem.getString('id'), toolIds)) {
-        turboEnchants.forEach(enchant => {
-            if (heldItem.getCompoundTag('enchantments').getInteger(enchant)) {
-                hoeStats.turbo = heldItem.getCompoundTag('enchantments').getInteger(enchant) * 5;
-            }
-        });
-    }
+    turboEnchants.forEach(enchant => {
+        if (heldItem.getCompoundTag('enchantments').getInteger(enchant) && toolToTurboEnchant[playerInformation.crop] === enchant) {
+            hoeStats.turbo = heldItem.getCompoundTag('enchantments').getInteger(enchant) * 5;
+        }
+    });
 
     // get rarity, made by joker876
     const substrings = ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC"]
@@ -150,7 +148,7 @@ export function updateGlobalFarmingStats(xpPerHour) {
                 globalStats.xpPerHourExpected = (globalStats.xpGained * 20 * 60 * 60);
             }
         } catch (e) {
-            console.log("Error", e.stack);
+            console.log("Error Update Information TabList", e.stack);
             console.log("Error", e.name);
             console.log("Error", e.message);
         }

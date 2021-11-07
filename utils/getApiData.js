@@ -76,7 +76,7 @@ export function getApiData(API_C) {
                         collection.cactus = (API_N.CACTUS !== API_C.CACTUS) ? API_N.CACTUS : API_C.CACTUS;
                     }
                 } catch (e) {
-                    console.log("Error", e.stack);
+                    console.log("Error Parsing API Data", e.stack);
                     console.log("Error", e.name);
                     console.log("Error", e.message);
                     console.log(JSON.stringify(API_N));
@@ -111,10 +111,10 @@ export function getApiData(API_C) {
                     globalStats.farmingLevel = farmingLevel;
                 }
                 return API_C;
-            }).catch((e => console.log(e)));
+            }).catch((e => console.log(e)));    
 
     } catch (e) {
-        console.log("Error", e.stack);
+        console.log("Error API General", e.stack);
         console.log("Error", e.name);
         console.log("Error", e.message);
     }
@@ -127,7 +127,7 @@ export function getBazaarData(return_price) {
         ChatLib.chat("§ePlease set your api key by generating a new key with §b/api new §eor using §b/hu2 key yourkey §e!");
         return return_price;
     }
-    sendRequest('https://sky.shiiyu.moe/api/bazaar')
+    sendRequest('https://sky.lea.moe/api/bazaar')
         .then(json => {
             json.forEach(value => {
                 price_sheet.push({key: value.id.toString(), value: value.sellPrice});
@@ -140,8 +140,8 @@ export function getBazaarData(return_price) {
             });
             return_price['mushroom'] = (price_sheet.find(o => o.key === "ENCHANTED_RED_MUSHROOM").value + price_sheet.find(o => o.key === "ENCHANTED_BROWN_MUSHROOM").value) / 2;
         }).catch(e => {
-        console.log("Error", e.stack);
-        console.log("Error", e.name);
+        console.log("Error bazaar parsing", e.stack);
+        console.log("Error", e);
         console.log("Error", e.message);
     });
     return return_price;

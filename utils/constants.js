@@ -296,7 +296,20 @@ export const primaryColorTable = {
 
 export const toolIds = ["HOE_CANE", "HOE_POTATO", "HOE_CARROT", "HOE_WHEAT", "HOE_WARTS", "PUMPKIN_DICER", "MELON_DICER", "COCO_CHOPPER", "FUNGI_CUTTER"]
 
-export const turboEnchants = ["turbo_cane", "turbo_potato", "turbo_carrot", "turbo_wheat", "turbo_warts", "turbo_pumpkin", "turbo_melon", "turbo_coco", "turbo_mushrooms"]
+export const turboEnchants = ["turbo_cane", "turbo_potato", "turbo_carrot", "turbo_wheat", "turbo_warts", "turbo_pumpkin", "turbo_melon", "turbo_coco", "turbo_mushrooms", "turbo_cactus"]
+
+export const toolToTurboEnchant = {
+    'cocoa': 'turbo_coco',
+    'wart': 'turbo_warts',
+    'carrot': 'turbo_carrot',
+    'pumpkin': 'turbo_pumpkin',
+    'cane': 'turbo_cane',
+    'wheat': 'turbo_wheat',
+    'mushroom': 'turbo_mushrooms',
+    'cactus': 'turbo_cactus',
+    'potato': 'turbo_potato',
+    'melon': 'turbo_melon'
+}
 
 export const units = ['/h', '/event', '/min', '/s', '/harvest']
 

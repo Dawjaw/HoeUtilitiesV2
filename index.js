@@ -2,7 +2,7 @@
 /// <reference lib="es2015" />
 
 import Settings from "./config";
-import gui, { npcPricing, blockToMCBlockName, bazaarFarmingCompression, playerInformation, farmingBlockTypes, hoeStats, collection, globalStats } from './utils/constants';
+import gui, { npcPricing, blockToMCBlockName, bazaarFarmingCompression, playerInformation, farmingBlockTypes, hoeStats, collection, globalStats, blocksToCollectionType } from './utils/constants';
 import { initializeToolInfo, renderToolInfo } from "./displays/toolInfo";
 import { getToolInfoWindow, getXpInfoWindow, getJacobTimerWindow } from "./displays/elementaDisplay";
 import { aggregateFarmingFortune, updateGlobalFarmingStats, updateHoeStats } from "./updateInformation";
@@ -184,7 +184,7 @@ register("renderOverlay", () => {
         }
 
     } catch (e) {
-        console.log("Error", e.stack);
+        console.log("Error renderOverlay", e.stack);
         console.log("Error", e.name);
         console.log("Error", e.message);
     }
@@ -196,6 +196,7 @@ register('tick', () => {
     const heldItem = Player.getHeldItem().getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
     playerInformation.toolIsEquipped = !!heldItem.getString('id').match(/HOE_(CANE|POTATO|CARROT|WHEAT|WARTS)|DICER|COCO_CHOPPER|CACTUS_KNIFE|FUNGI_CUTTER/);
     if (playerInformation.toolIsEquipped) {
+        /*
         if (heldItem.getString('id').match(/HOE_CANE/)) playerInformation.crop = 'cane';
         else if (heldItem.getString('id').match(/HOE_POTATO/)) playerInformation.crop = 'potato';
         else if (heldItem.getString('id').match(/HOE_CARROT/)) playerInformation.crop = 'carrot';
@@ -206,6 +207,7 @@ register('tick', () => {
         else if (heldItem.getString('id').match(/COCO_CHOPPER/)) playerInformation.crop = 'cocoa';
         else if (heldItem.getString('id').match(/CACTUS_KNIFE/)) playerInformation.crop = 'cactus';
         else if (heldItem.getString('id').match(/FUNGI_CUTTER/)) playerInformation.crop = 'mushroom';
+        */
         playerInformation.toolType = (['pumpkin', 'melon', 'cocoa'].includes(playerInformation.crop)) ? 'Axe' : 'Hoe';
     }
 
@@ -225,8 +227,7 @@ register('tick', () => {
 register('step', () => {
     // update Hoe Information
     if (!Player.lookingAt().toString().startsWith("Entity") && !Player.lookingAt().toString().startsWith("BlockType")) { 
-        if (checkInput(Player.lookingAt().getType().getRegistryName().toString().split(':')[1], farmingBlockTypes)) 78907890
-        {
+        if (checkInput(Player.lookingAt().getType().getRegistryName().toString().split(':')[1], farmingBlockTypes)) {
             blockLookingAt = Player.lookingAt().getType().getRegistryName().toString().split(':')[1];
         }
     }
@@ -246,13 +247,17 @@ register('step', () => {
 
 register('step', () => {
     if (World.isLoaded()) {
-        API_C = getApiData(API_C);
+        new Thread(() => {
+            API_C = getApiData(API_C);
+        }).start();
     }
 }).setDelay(90);
 
 register('step', () => {
     if (World.isLoaded()) {
-        bazaarObject = getBazaarData(bazaarObject);
+        new Thread(() => {
+            bazaarObject = getBazaarData(bazaarObject);
+        }).start();
     }
     getJacobEvents();
 }).setDelay(240);
@@ -282,19 +287,23 @@ function handleJacobsEvents() {
 }
 
 // waiting for ct 2.0 to get fixed
- 
-let C07PacketPlayerDigging = Java.type("net.minecraft.network.play.client.C07PacketPlayerDigging").class.toString();
+/*
+const C07PacketPlayerDigging = Java.type("net.minecraft.network.play.client.C07PacketPlayerDigging");
 register('packetSent', (packet, event) => {
     try {
-        if(packet.class.toString().equals(C07PacketPlayerDigging)) {
+        if(packet instanceof C07PacketPlayerDigging) {
             let status = packet.func_180762_c();
-            if (status.toString() === "START_DESTROY_BLOCK") {
+            ChatLib.chat(status.toString());
+            if (status === "START_DESTROY_BLOCK") {
+                let position = packet.func_179715_a();
+                ChatLib.chat(JSON.stringify(position));
                 /*
                 calculateCoinsPerHour();
                 handleYieldPerHour();
                 handleXPPerHour();
                 addCropDrop(blockLookingAt);
-                blockLookingAt = "air";*/
+                blockLookingAt = "air";
+                
             }
         }
     } catch (e) {
@@ -303,7 +312,16 @@ register('packetSent', (packet, event) => {
         console.log("Error", e.message);
     }   
 });
+*/
 
+// working block break trigger used in 2.0.0+ versions
+register('blockBreak', (block, player, event) => {
+    playerInformation.crop = blocksToCollectionType[block.type.getRegistryName().split(":")[1]];
+    calculateCoinsPerHour();
+    handleYieldPerHour();
+    handleXPPerHour();
+    addCropDrop(playerInformation.crop);
+});
 
 function printMemoryUsage() {
     console.log(`Memory Size overview:`);
@@ -327,6 +345,7 @@ register("actionBar", (message, e) => {
     }
 }).setCriteria("${message}");
 
+/*
 // trigger to increase Collection
 let S29PacketSoundEffect = Java.type("net.minecraft.network.play.server.S29PacketSoundEffect").class.toString();
 register('packetReceived', (packet, event) => {
@@ -339,7 +358,7 @@ register('packetReceived', (packet, event) => {
                     lastCropAmount = getAmount();
                     reduced = true;
                     return;
-                }*/
+                }
                 if (nonFarmingDingSoundCounter > 0) {
                     if (!reduced) {
                         nonFarmingDingSoundCounter--;
@@ -357,6 +376,7 @@ register('packetReceived', (packet, event) => {
         }
     }
 });
+*/
 
 // check if the player gets a compacted form of farming blocks
 /* not needed as of 8/24/21
