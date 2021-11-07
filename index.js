@@ -196,18 +196,6 @@ register('tick', () => {
     const heldItem = Player.getHeldItem().getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
     playerInformation.toolIsEquipped = !!heldItem.getString('id').match(/HOE_(CANE|POTATO|CARROT|WHEAT|WARTS)|DICER|COCO_CHOPPER|CACTUS_KNIFE|FUNGI_CUTTER/);
     if (playerInformation.toolIsEquipped) {
-        /*
-        if (heldItem.getString('id').match(/HOE_CANE/)) playerInformation.crop = 'cane';
-        else if (heldItem.getString('id').match(/HOE_POTATO/)) playerInformation.crop = 'potato';
-        else if (heldItem.getString('id').match(/HOE_CARROT/)) playerInformation.crop = 'carrot';
-        else if (heldItem.getString('id').match(/HOE_WARTS/)) playerInformation.crop = 'wart';
-        else if (heldItem.getString('id').match(/HOE_WHEAT/)) playerInformation.crop = 'wheat';
-        else if (heldItem.getString('id').match(/PUMPKIN_DICER/)) playerInformation.crop = 'pumpkin';
-        else if (heldItem.getString('id').match(/MELON_DICER/)) playerInformation.crop = 'melon';
-        else if (heldItem.getString('id').match(/COCO_CHOPPER/)) playerInformation.crop = 'cocoa';
-        else if (heldItem.getString('id').match(/CACTUS_KNIFE/)) playerInformation.crop = 'cactus';
-        else if (heldItem.getString('id').match(/FUNGI_CUTTER/)) playerInformation.crop = 'mushroom';
-        */
         playerInformation.toolType = (['pumpkin', 'melon', 'cocoa'].includes(playerInformation.crop)) ? 'Axe' : 'Hoe';
     }
 
@@ -286,34 +274,6 @@ function handleJacobsEvents() {
     }
 }
 
-// waiting for ct 2.0 to get fixed
-/*
-const C07PacketPlayerDigging = Java.type("net.minecraft.network.play.client.C07PacketPlayerDigging");
-register('packetSent', (packet, event) => {
-    try {
-        if(packet instanceof C07PacketPlayerDigging) {
-            let status = packet.func_180762_c();
-            ChatLib.chat(status.toString());
-            if (status === "START_DESTROY_BLOCK") {
-                let position = packet.func_179715_a();
-                ChatLib.chat(JSON.stringify(position));
-                /*
-                calculateCoinsPerHour();
-                handleYieldPerHour();
-                handleXPPerHour();
-                addCropDrop(blockLookingAt);
-                blockLookingAt = "air";
-                
-            }
-        }
-    } catch (e) {
-        console.log("Error", e.stack);
-        console.log("Error", e.name);
-        console.log("Error", e.message);
-    }   
-});
-*/
-
 // working block break trigger used in 2.0.0+ versions
 register('blockBreak', (block, player, event) => {
     playerInformation.crop = blocksToCollectionType[block.type.getRegistryName().split(":")[1]];
@@ -344,54 +304,6 @@ register("actionBar", (message, e) => {
         }
     }
 }).setCriteria("${message}");
-
-/*
-// trigger to increase Collection
-let S29PacketSoundEffect = Java.type("net.minecraft.network.play.server.S29PacketSoundEffect").class.toString();
-register('packetReceived', (packet, event) => {
-    if (packet.class.toString().equals(S29PacketSoundEffect)) {
-        if (packet.func_149212_c().equals("random.orb")) {
-            if (packet.func_149209_h().toString() !== "1.4920635223388672") { // Coin Talisman sound
-                let reduced = false;
-                // as of 8/24/21 certain crops no longer give any carp xp and compacted items dont yield any carp xp either
-                /*if(getAmount() < lastCropAmount) {
-                    lastCropAmount = getAmount();
-                    reduced = true;
-                    return;
-                }
-                if (nonFarmingDingSoundCounter > 0) {
-                    if (!reduced) {
-                        nonFarmingDingSoundCounter--;
-                        return;
-                    }
-                    nonFarmingDingSoundCounter -= 1;
-                }
-                calculateCoinsPerHour();
-                handleYieldPerHour();
-                handleXPPerHour();
-                addCropDrop(playerInformation.crop);
-                blockLookingAt = "air";
-                lastCropAmount = getAmount();
-            }
-        }
-    }
-});
-*/
-
-// check if the player gets a compacted form of farming blocks
-/* not needed as of 8/24/21
-register('packetReceived', (packet, event) => {
-   if(packet.class.toString().includes("S2FPacketSetSlot")) {
-       if(packet.func_149174_e() !== null) {
-           if(Player.getOpenedInventory().getName().toString() === "container") {
-               if(checkInput(ChatLib.removeFormatting(packet.func_149174_e().func_82833_r()), farmingBlockDrops)){
-                   nonFarmingDingSoundCounter+=1
-               }
-           }
-       }
-   }
-});
-*/
 
 function getAmount() {
     let temp = 0;
