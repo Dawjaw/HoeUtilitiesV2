@@ -2,7 +2,7 @@
 /// <reference lib="es2015" />
 
 import Settings from "./config";
-import gui, { npcPricing, blockToMCBlockName, bazaarFarmingCompression, playerInformation, farmingBlockTypes, hoeStats, collection, globalStats, blocksToCollectionType } from './utils/constants';
+import gui, { blockMaxAge, npcPricing, blockToMCBlockName, bazaarFarmingCompression, playerInformation, farmingBlockTypes, hoeStats, collection, globalStats, blocksToCollectionType } from './utils/constants';
 import { initializeToolInfo, renderToolInfo } from "./displays/toolInfo";
 import { getToolInfoWindow, getXpInfoWindow, getJacobTimerWindow } from "./displays/elementaDisplay";
 import { aggregateFarmingFortune, updateGlobalFarmingStats, updateHoeStats } from "./updateInformation";
@@ -276,11 +276,23 @@ function handleJacobsEvents() {
 
 // working block break trigger used in 2.0.0+ versions
 register('blockBreak', (block, player, event) => {
+    const ageBlockList = ['carrot', 'potato', 'wheat', 'cocoa', 'wart'];
+    const nonAgeBlockList = ['mushroom', 'melon', 'pumpkin', 'cane'];
     playerInformation.crop = blocksToCollectionType[block.type.getRegistryName().split(":")[1]];
-    calculateCoinsPerHour();
-    handleYieldPerHour();
-    handleXPPerHour();
-    addCropDrop(playerInformation.crop);
+    if(nonAgeBlockList.includes(playerInformation.crop)) {
+        calculateCoinsPerHour();
+        handleYieldPerHour();
+        handleXPPerHour();
+        addCropDrop(playerInformation.crop);
+    } if(ageBlockList.includes(playerInformation.crop)) {
+        let blockAge = block.getState().toString().match(/[0-9]+/)[0];
+        if(blockAge === blockMaxAge[playerInformation.crop]) {
+            calculateCoinsPerHour();
+            handleYieldPerHour();
+            handleXPPerHour();
+            addCropDrop(playerInformation.crop);
+        }
+    }
 });
 
 function printMemoryUsage() {

@@ -331,6 +331,14 @@ export const blocksToCollectionType = {
     'melon_block': 'melon'
 }
 
+export const blockMaxAge = {
+    'carrot': '7',
+    'potato': '7',
+    'wheat': '7',
+    'cocoa': '2',
+    'wart': '3',
+}
+
 export const collectionTypeToBlocks = {
     'cocoa': 'cocoa',
     'wart': 'nether_wart',
