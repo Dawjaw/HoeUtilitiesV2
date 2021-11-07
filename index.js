@@ -274,37 +274,27 @@ function handleJacobsEvents() {
     }
 }
 
+function handleBlockBreakEvent() {
+    calculateCoinsPerHour();
+    handleYieldPerHour();
+    handleXPPerHour();
+    addCropDrop(playerInformation.crop);
+}
+
 // working block break trigger used in 2.0.0+ versions
 register('blockBreak', (block, player, event) => {
     const ageBlockList = ['carrot', 'potato', 'wheat', 'cocoa', 'wart'];
     const nonAgeBlockList = ['mushroom', 'melon', 'pumpkin', 'cane'];
     playerInformation.crop = blocksToCollectionType[block.type.getRegistryName().split(":")[1]];
     if(nonAgeBlockList.includes(playerInformation.crop)) {
-        calculateCoinsPerHour();
-        handleYieldPerHour();
-        handleXPPerHour();
-        addCropDrop(playerInformation.crop);
+        handleBlockBreakEvent();
     } if(ageBlockList.includes(playerInformation.crop)) {
         let blockAge = block.getState().toString().match(/[0-9]+/)[0];
         if(blockAge === blockMaxAge[playerInformation.crop]) {
-            calculateCoinsPerHour();
-            handleYieldPerHour();
-            handleXPPerHour();
-            addCropDrop(playerInformation.crop);
+            handleBlockBreakEvent();
         }
     }
 });
-
-function printMemoryUsage() {
-    console.log(`Memory Size overview:`);
-    console.log(`Collection: ${memorySizeOf(collection)}`);
-    console.log(`Hoe Information: ${memorySizeOf(hoeStats)}`);
-    console.log(`Player Information: ${memorySizeOf(globalStats)}`);
-    console.log(`Block buffer: ${memorySizeOf(alreadyBrokenList)}`);
-    let mobj = { collection, hoeStats, globalStats, alreadyBrokenList };
-    console.log(`total: ${memorySizeOf(mobj)}`);
-    delete mobj;
-}
 
 register("actionBar", (message, e) => {
     if (message.includes('Farming')) {
@@ -316,22 +306,6 @@ register("actionBar", (message, e) => {
         }
     }
 }).setCriteria("${message}");
-
-function getAmount() {
-    let temp = 0;
-    for (let i = 0; i < 36; i++) {
-        let is = Player.getInventory().getStackInSlot(i);
-        if (is == null) {
-            i++;
-            return;
-        }
-        if (is.getName().includes(blockToMCBlockName[playerInformation.crop])) {
-            temp += is.getStackSize();
-        }
-
-    }
-    return temp;
-}
 
 function handleXPPerHour() {
     if (globalStats.xpGained !== undefined) {
