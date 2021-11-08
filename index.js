@@ -4,7 +4,7 @@
 import Settings from "./config";
 import gui, { blockMaxAge, npcPricing, blockToMCBlockName, bazaarFarmingCompression, playerInformation, farmingBlockTypes, hoeStats, collection, globalStats, blocksToCollectionType } from './utils/constants';
 import { initializeToolInfo, renderToolInfo } from "./displays/toolInfo";
-import { getToolInfoWindow, getXpInfoWindow, getJacobTimerWindow } from "./displays/elementaDisplay";
+import { getToolInfoWindow, getXpInfoWindow, getJacobTimerWindow, getJacobTimerTimer } from "./displays/elementaDisplay";
 import { aggregateFarmingFortune, updateGlobalFarmingStats, updateHoeStats } from "./updateInformation";
 import { getApiData, getBazaarData, getJacobEvents } from "./utils/getApiData";
 import { addCommas, memorySizeOf, addCropDrop, checkInput, getCropDrop, resetGlobalFarmingInformation, updateSetting } from "./utils/utils";
@@ -72,14 +72,24 @@ const mainWindow = new Window();
 let toolInfoWindow = getToolInfoWindow();
 let xpInfoWindow = getXpInfoWindow();
 let jacobTimerWindow = getJacobTimerWindow();
+let jacobTimerText = getJacobTimerTimer();
+let lastTimeImageShown = Date.now();
+let lastCrops = globalStats.nextJacobCrops;
 
 function guiPreload() {
-    if (xpInfoWindow !== undefined && preload === 0) {
-        mainWindow.addChildren(toolInfoWindow, xpInfoWindow);
+    if (!jacobTimerWindow) {
+        getJacobEvents();
+        jacobTimerWindow = getJacobTimerWindow();
+        jacobTimerText = getJacobTimerTimer();
+    }
+    if (xpInfoWindow !== undefined && preload === 0 && jacobTimerWindow !== undefined) {
+        mainWindow.addChildren(toolInfoWindow, xpInfoWindow, jacobTimerWindow, jacobTimerText);
         preload = 1;
     } else {
         toolInfoWindow = getToolInfoWindow();
         xpInfoWindow = getXpInfoWindow();
+        jacobTimerWindow = getJacobTimerWindow();
+        jacobTimerText = getJacobTimerTimer();
     }
 }
 
@@ -168,6 +178,8 @@ register("renderOverlay", () => {
             if (playerInformation.toolIsEquipped && !Settings.showLegacyGUI) {
                 mainWindow.removeChild(toolInfoWindow);
                 mainWindow.removeChild(xpInfoWindow);
+                mainWindow.removeChild(jacobTimerText);
+                if(!Settings.showJacobTimer) mainWindow.removeChild(jacobTimerWindow);
                 if (Settings.showToolInfo) {
                     toolInfoWindow = getToolInfoWindow();
                     mainWindow.addChild(toolInfoWindow);
@@ -176,10 +188,22 @@ register("renderOverlay", () => {
                     xpInfoWindow = getXpInfoWindow();
                     mainWindow.addChild(xpInfoWindow);
                 }
+                if(Settings.showJacobTimer && jacobTimerWindow && lastCrops !== JSON.stringify(globalStats.nextJacobCrops)) {
+                    mainWindow.removeChild(jacobTimerWindow);
+                    jacobTimerWindow = getJacobTimerWindow();
+                    mainWindow.addChild(jacobTimerWindow);
+                    lastCrops = JSON.stringify(globalStats.nextJacobCrops);
+                }
+                if(Settings.showJacobTimer && jacobTimerText) {
+                    jacobTimerText = getJacobTimerTimer();
+                    mainWindow.addChild(jacobTimerText);
+                }
                 mainWindow.draw();
             } else {
                 mainWindow.removeChild(toolInfoWindow);
                 mainWindow.removeChild(xpInfoWindow);
+                mainWindow.removeChild(jacobTimerText);
+                mainWindow.removeChild(jacobTimerWindow);
             }
         }
 
@@ -189,7 +213,6 @@ register("renderOverlay", () => {
         console.log("Error", e.message);
     }
 });
-
 
 let tickStep = 0;
 register('tick', () => {
@@ -250,19 +273,24 @@ register('step', () => {
     getJacobEvents();
 }).setDelay(240);
 
+// convert milliseconds to minutes and seconds
+function convertSecondsToMinutesAndSeconds(milliseconds) {
+    let seconds = milliseconds;
+    let minutes = Math.floor(seconds / 60);
+    seconds = Math.floor(seconds % 60);
+    return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+}
+
 function handleJacobsEvents() {
-    if (globalStats.jacobEvents !== undefined) {
+    if (globalStats.jacobEvents) {
         for (jEvent of globalStats.jacobEvents) {
             let currentTime = Math.floor((new Date()).getTime() / 1000);
             let eventTime = jEvent['time'];
             if (currentTime < eventTime) {
-                console.log("this shouldnt be printed in console!");
                 let dateObject = new Date(eventTime * 1000);
                 let humanDateFormat = dateObject.toLocaleString()
                 let delta = eventTime - currentTime;
-                let minutes = Math.floor(delta / 60);
-                let seconds = delta % 60;
-                globalStats.timeUntilJacobs = `${minutes}:${seconds}`;
+                globalStats.timeUntilJacobs = convertSecondsToMinutesAndSeconds(delta);
                 let eventString = [];
                 jEvent['crops'].forEach((crop) => {
                     eventString.push(crop);
@@ -270,6 +298,10 @@ function handleJacobsEvents() {
                 globalStats.nextJacobCrops = eventString;
                 break;
             }
+        }
+    } else {
+        if(FileLib.exists("./config/ChatTriggers/modules/HoeUtilitiesV2/jacobs.json")) {
+            globalStats.jacobEvents = JSON.parse(FileLib.read("./config/ChatTriggers/modules/HoeUtilitiesV2/jacobs.json"));
         }
     }
 }

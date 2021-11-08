@@ -17,7 +17,7 @@ import {
     calcRotation,
     updateSetting
 } from "../utils/utils";
-import gui, {playerInformation, globalStats, elementaStuff, hoeStats, collection, elementaStuff, mouseInformation} from "../utils/constants";
+import gui, {playerInformation, globalStats, elementaStuff, hoeStats, collection, elementaStuff, mouseInformation, cropToImage} from "../utils/constants";
 import Settings from "../config";
 
 const Color = Java.type("java.awt.Color");
@@ -31,51 +31,49 @@ function turnToNumber(value) {
     }
 }
 
-export function createImage() {
-    console.log(globalStats.nextJacobCrops);
-    console.log(globalStats.jacobEvents);
+export function createJacobTimerGui() {
+    const textElement = new UIText(`${globalStats.timeUntilJacobs}`)
+        .setX((Settings.jacob_x + 50).pixels())
+        .setY((Settings.jacob_y + 6).pixels());
 
-    var file = new File("config/ChatTriggers/images/carrot.png");
-    var image1 = UIImage.Companion.ofFile(file)
-        .setX((100).pixels())
-        .setY((100).pixels())
-        .setWidth((15).pixels())
-        .setHeight((15).pixels());
-    return image1;
+    return textElement;
 }
 
 export function createJacobTimerGuiContainer() {
-    if (!Settings.showJacobTimer) return;
+    if (!Settings.showJacobTimer || !globalStats.nextJacobCrops) return;
 
-    const Field1 = createNewTextElement("", globalStats.timeUntilJacobs);
+    console.log(JSON.stringify(globalStats.nextJacobCrops));
+    //console.log(globalStats.nextJacobCrops[0]);
 
-    console.log(globalStats.nextJacobCrops);
-    console.log(globalStats.nextJacobCrops[0]);
-
-    const file = new File(`config/ChatTriggers/images/${globalStats.nextJacobCrops[0]}.png`);
-    const file2 = new File(`config/ChatTriggers/images/${globalStats.nextJacobCrops[1]}.png`);
-    const file3 = new File(`config/ChatTriggers/images/${globalStats.nextJacobCrops[2]}.png`);
+    const file = new File(`config/ChatTriggers/images/${cropToImage[globalStats.nextJacobCrops[0]]}.png`);
+    const file2 = new File(`config/ChatTriggers/images/${cropToImage[globalStats.nextJacobCrops[1]]}.png`);
+    const file3 = new File(`config/ChatTriggers/images/${cropToImage[globalStats.nextJacobCrops[2]]}.png`);
 
     const image1 = UIImage.Companion.ofFile(file)
+        .setX((0).pixels())
+        .setY((2.5).pixels())
         .setWidth((15).pixels())
         .setHeight((15).pixels());
 
     const image2 = UIImage.Companion.ofFile(file2)
+        .setX((15).pixels())
+        .setY((2.5).pixels())
         .setWidth((15).pixels())
         .setHeight((15).pixels());
     
     const image3 = UIImage.Companion.ofFile(file3)
+        .setX((30).pixels())
+        .setY((2.5).pixels())
         .setWidth((15).pixels())
         .setHeight((15).pixels());
 
     const mainUIContainer = new UIRoundedRectangle(3)
         .setX((Settings.jacob_x).pixels())
         .setY((Settings.jacob_y).pixels())
-        .setWidth(new ChildBasedMaxSizeConstraint())
-        .setHeight(new AdditiveConstraint(new ChildBasedSizeConstraint(), (7).pixels()))
+        .setWidth((100).pixels())
+        .setHeight((20).pixels())
         .setColor(new ConstantColorConstraint(getJavaColor(new Color(Settings.xpInfoBackgroundColor.getRed()/255, Settings.xpInfoBackgroundColor.getGreen()/255, Settings.xpInfoBackgroundColor.getBlue()/255, Settings.xpInfoBackgroundColor.getAlpha()/255))));
 
-    mainUIContainer.addChildren(Field1);
     mainUIContainer.addChildren(image1);
     mainUIContainer.addChildren(image2);
     mainUIContainer.addChildren(image3);

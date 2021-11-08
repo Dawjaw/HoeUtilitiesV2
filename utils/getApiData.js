@@ -148,8 +148,9 @@ export function getBazaarData(return_price) {
 }
 
 export function getJacobEvents() {
-    sendRequest('https://jacobs.jeanlaurent.fr/data/jacobs.json')
+    sendRequest('https://dawjaw.net/jacobs')
         .then(json => {
+            //globalStats.jacobEvents = json;
             globalStats.jacobEvents = json;
         }).catch(e => {
             console.log("Error JacobEvent", e.stack);

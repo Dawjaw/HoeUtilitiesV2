@@ -1,5 +1,5 @@
 import Settings from "../config";
-import {createToolInfoGuiContainer, createXPInfoGuiContainer, createJacobTimerGuiContainer, createImage} from "./elementaHelper";
+import {createToolInfoGuiContainer, createXPInfoGuiContainer, createJacobTimerGuiContainer, createJacobTimerGui} from "./elementaHelper";
 import {getMaxEfficiencyYield, getJavaColor, getColor, addCommas, getCultivatingCount, getMaxEfficiencyYield, calcRotation} from "../utils/utils";
 import {playerInformation, globalStats} from "../utils/constants";
 const Color = Java.type("java.awt.Color");
@@ -28,6 +28,11 @@ export function getXpInfoWindow(){
 }
 
 export function getJacobTimerWindow(){
-    let a = createImage();
+    let a = createJacobTimerGuiContainer();
+    return a;
+}
+
+export function getJacobTimerTimer(){
+    let a = createJacobTimerGui();
     return a;
 }

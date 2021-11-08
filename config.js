@@ -38,7 +38,7 @@ class Settings {
         subcategory: "Jacob's Event",
         hidden: true
     })
-    jacob_x = 50;
+    jacob_x = 25;
 
     @NumberProperty({
         name: "JacobY",
@@ -46,7 +46,7 @@ class Settings {
         subcategory: "Jacob's Event",
         hidden: true
     })
-    jacob_y = 50;
+    jacob_y = 0;
 
     //-----------------------------------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------
