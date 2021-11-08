@@ -148,13 +148,19 @@ export function getBazaarData(return_price) {
 }
 
 export function getJacobEvents() {
-    sendRequest('https://dawjaw.net/jacobs')
-        .then(json => {
-            //globalStats.jacobEvents = json;
-            globalStats.jacobEvents = json;
-        }).catch(e => {
-            console.log("Error JacobEvent", e.stack);
-            console.log("Error JacobEvent", e.name);
-            console.log("Error JacobEvent", e.message);
-    });
+    try {
+        sendRequest('https://dawjaw.net/jacobs')
+            .then(json => {
+                //globalStats.jacobEvents = json;
+                globalStats.jacobEvents = json;
+            }).catch(e => {
+                console.log("Error JacobEvent", e.stack);
+                console.log("Error JacobEvent", e.name);
+                console.log("Error JacobEvent", e.message);
+        });
+    } catch(e) {
+        console.log("Error JacobEvent", e.stack);
+        console.log("Error JacobEvent", e.name);
+        console.log("Error JacobEvent", e.message);
+    }
 }

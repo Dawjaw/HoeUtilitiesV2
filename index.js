@@ -75,6 +75,7 @@ let jacobTimerWindow = getJacobTimerWindow();
 let jacobTimerText = getJacobTimerTimer();
 let lastTimeImageShown = Date.now();
 let lastCrops = globalStats.nextJacobCrops;
+let jacobTimerWasDisabled = false;
 
 function guiPreload() {
     if (!jacobTimerWindow) {
@@ -178,8 +179,6 @@ register("renderOverlay", () => {
             if (playerInformation.toolIsEquipped && !Settings.showLegacyGUI) {
                 mainWindow.removeChild(toolInfoWindow);
                 mainWindow.removeChild(xpInfoWindow);
-                mainWindow.removeChild(jacobTimerText);
-                if(!Settings.showJacobTimer) mainWindow.removeChild(jacobTimerWindow);
                 if (Settings.showToolInfo) {
                     toolInfoWindow = getToolInfoWindow();
                     mainWindow.addChild(toolInfoWindow);
@@ -188,28 +187,41 @@ register("renderOverlay", () => {
                     xpInfoWindow = getXpInfoWindow();
                     mainWindow.addChild(xpInfoWindow);
                 }
-                if(Settings.showJacobTimer && jacobTimerWindow && lastCrops !== JSON.stringify(globalStats.nextJacobCrops)) {
-                    mainWindow.removeChild(jacobTimerWindow);
-                    jacobTimerWindow = getJacobTimerWindow();
-                    mainWindow.addChild(jacobTimerWindow);
-                    lastCrops = JSON.stringify(globalStats.nextJacobCrops);
-                }
-                if(Settings.showJacobTimer && jacobTimerText) {
-                    jacobTimerText = getJacobTimerTimer();
-                    mainWindow.addChild(jacobTimerText);
-                }
-                if(gui.isOpen()) {
-                    mainWindow.removeChild(jacobTimerWindow);
-                    jacobTimerWindow = getJacobTimerWindow();
-                    mainWindow.addChild(jacobTimerWindow);
-                    lastCrops = JSON.stringify(globalStats.nextJacobCrops);
-                }
                 mainWindow.draw();
             } else {
                 mainWindow.removeChild(toolInfoWindow);
                 mainWindow.removeChild(xpInfoWindow);
-                mainWindow.removeChild(jacobTimerText);
+            }
+            if(!Settings.showJacobTimer) {
+                jacobTimerWasDisabled = true;
                 mainWindow.removeChild(jacobTimerWindow);
+                mainWindow.removeChild(jacobTimerText);
+            }
+            if(Settings.showJacobTimer && jacobTimerWindow && lastCrops !== JSON.stringify(globalStats.nextJacobCrops)) {
+                mainWindow.removeChild(jacobTimerWindow);
+                jacobTimerWindow = getJacobTimerWindow();
+                mainWindow.addChild(jacobTimerWindow);
+                lastCrops = JSON.stringify(globalStats.nextJacobCrops);
+            } else if (jacobTimerWasDisabled) {
+                mainWindow.removeChild(jacobTimerWindow);
+                jacobTimerWindow = getJacobTimerWindow();
+                mainWindow.addChild(jacobTimerWindow);
+                lastCrops = JSON.stringify(globalStats.nextJacobCrops);
+                jacobTimerWasDisabled = false;
+            }
+            if(Settings.showJacobTimer && jacobTimerText) {
+                mainWindow.removeChild(jacobTimerText);
+                jacobTimerText = getJacobTimerTimer();
+                mainWindow.addChild(jacobTimerText);
+            }
+            if(gui.isOpen()) {
+                mainWindow.removeChild(jacobTimerWindow);
+                jacobTimerWindow = getJacobTimerWindow();
+                mainWindow.addChild(jacobTimerWindow);
+                lastCrops = JSON.stringify(globalStats.nextJacobCrops);
+            }
+            if(!playerInformation.toolIsEquipped){
+                mainWindow.draw();
             }
         }
 
