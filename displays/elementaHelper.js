@@ -42,7 +42,7 @@ export function createJacobTimerGui() {
 export function createJacobTimerGuiContainer() {
     if (!Settings.showJacobTimer || !globalStats.nextJacobCrops) return;
 
-    console.log(JSON.stringify(globalStats.nextJacobCrops));
+    //console.log(JSON.stringify(globalStats.nextJacobCrops));
     //console.log(globalStats.nextJacobCrops[0]);
 
     const file = new File(`config/ChatTriggers/images/${cropToImage[globalStats.nextJacobCrops[0]]}.png`);
@@ -78,7 +78,11 @@ export function createJacobTimerGuiContainer() {
     mainUIContainer.addChildren(image2);
     mainUIContainer.addChildren(image3);
 
-    if(gui.isOpen()){
+    const Mouse = Java.type("org.lwjgl.input.Mouse");
+    Mouse.getNativeCursor();
+    Mouse.poll();
+
+    if(gui.isOpen() && Mouse.isButtonDown(0)){
         mainUIContainer.setColor(new ConstantColorConstraint(getJavaColor(new Color(1, 1, 1, 0.2))));
     }
 

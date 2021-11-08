@@ -198,6 +198,12 @@ register("renderOverlay", () => {
                     jacobTimerText = getJacobTimerTimer();
                     mainWindow.addChild(jacobTimerText);
                 }
+                if(gui.isOpen()) {
+                    mainWindow.removeChild(jacobTimerWindow);
+                    jacobTimerWindow = getJacobTimerWindow();
+                    mainWindow.addChild(jacobTimerWindow);
+                    lastCrops = JSON.stringify(globalStats.nextJacobCrops);
+                }
                 mainWindow.draw();
             } else {
                 mainWindow.removeChild(toolInfoWindow);
