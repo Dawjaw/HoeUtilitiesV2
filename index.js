@@ -77,6 +77,10 @@ let lastTimeImageShown = Date.now();
 let lastCrops = globalStats.nextJacobCrops;
 let jacobTimerWasDisabled = false;
 
+let startBlockBreakPerSecond;
+let lastBlockBreakPerSecond;
+let blockBreaksInTimeFrame;
+
 function guiPreload() {
     if (!jacobTimerWindow) {
         getJacobEvents();
@@ -270,6 +274,7 @@ register('step', () => {
     aggregateFarmingFortune();
     resetLiveCounters();
     handleJacobsEvents();
+    handleBlockBreaksPerSecond();
 
     if (preload === 0) guiPreload();
 }).setDelay(1);
@@ -329,6 +334,8 @@ function handleBlockBreakEvent() {
     handleYieldPerHour();
     handleXPPerHour();
     addCropDrop(playerInformation.crop);
+    blockBreaksInTimeFrame++;
+    handleBlockBreaksPerSecond();
 }
 
 // working block break trigger used in 2.0.0+ versions
@@ -345,6 +352,27 @@ register('blockBreak', (block, player, event) => {
         }
     }
 });
+
+
+function handleBlockBreaksPerSecond() {
+    if(!startBlockBreakPerSecond) {
+        startBlockBreakPerSecond = Date.now();
+        blockBreaksInTimeFrame = 0;
+        globalStats.blockPerSeconds = 0;
+    } 
+    if (((Date.now() / 1000) - (lastBlockBreakPerSecond / 1000)) > 30) {
+        startBlockBreakPerSecond = Date.now();
+        blockBreaksInTimeFrame = 0;
+        globalStats.blockPerSeconds = 0;
+        lastBlockBreakPerSecond = undefined;
+    } 
+    if(startBlockBreakPerSecond) { 
+        lastBlockBreakPerSecond = Date.now();
+        let diff = (lastBlockBreakPerSecond / 1000) - (startBlockBreakPerSecond / 1000);
+        globalStats.blockPerSeconds = (blockBreaksInTimeFrame / diff);
+    }
+}
+
 
 register("actionBar", (message, e) => {
     if (message.includes('Farming')) {

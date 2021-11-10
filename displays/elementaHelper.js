@@ -124,12 +124,12 @@ export function createXPInfoGuiContainer() {
         .setHeight(new AdditiveConstraint(new ChildBasedSizeConstraint(), (7).pixels()))
         .setColor(new ConstantColorConstraint(getJavaColor(new Color(Settings.xpInfoBackgroundColor.getRed()/255, Settings.xpInfoBackgroundColor.getGreen()/255, Settings.xpInfoBackgroundColor.getBlue()/255, Settings.xpInfoBackgroundColor.getAlpha()/255))));
 
-    mainUIContainer.addChild(Field1);
-    mainUIContainer.addChild(Field2);
-    mainUIContainer.addChild(Field3);
-    mainUIContainer.addChild(Field4);
-    mainUIContainer.addChild(Field5);
-    mainUIContainer.addChild(Field6);
+    if(Settings.showCurrentLevel) mainUIContainer.addChild(Field1);
+    if(Settings.showCurrentXP) mainUIContainer.addChild(Field2);
+    if(globalStats.currentLevel !== 60 && Settings.showXPUntilNextLevel) mainUIContainer.addChild(Field3);
+    if(globalStats.currentLevel !== 60 && Settings.showTimeUntilNextLevel) mainUIContainer.addChild(Field4);
+    if(Settings.showXPPerHour) mainUIContainer.addChild(Field5);
+    if(Settings.showMaxXPPerHour) mainUIContainer.addChild(Field6);
 
     if(gui.isOpen()){
         mainUIContainer.setColor(new ConstantColorConstraint(getJavaColor(new Color(1, 1, 1, 0.2))));
@@ -162,6 +162,7 @@ export function createToolInfoGuiContainer() {
     const Field1 = createNewTextElement("Counter", addCommas(hoeStats.counter));
     const Field2 = createNewTextElement("Cultivating", (cultivating !== 0) ? addCommas(cultivating) : " 0 ");
     const Field3 = createNewTextElement("Farming Fortune", playerInformation.total);
+    const FieldBlockBreak = createNewTextElement("Blocks/s", (globalStats.blockPerSeconds.toFixed(3)));
     const Field4 = createNewGaugeElement("Yield Efficiency", (globalStats.yieldPerHour) ? globalStats.yieldPerHour : "0", maxYield);
     const Field5 = createNewTextElement("Max Yield", maxYield);
     const Field6 = createNewTextElement("Expected Profit", (globalStats.cropGain) ? (globalStats.cropGain+"/h") : "0/h");
@@ -176,15 +177,16 @@ export function createToolInfoGuiContainer() {
         .setHeight(new AdditiveConstraint(new ChildBasedSizeConstraint(), (7).pixels()))
         .setColor(new ConstantColorConstraint(getJavaColor(new Color(Settings.toolInfoBackgroundColor.getRed()/255, Settings.toolInfoBackgroundColor.getGreen()/255, Settings.toolInfoBackgroundColor.getBlue()/255, Settings.toolInfoBackgroundColor.getAlpha()/255))));
 
-    (hoeStats.counter) ? mainUIContainer.addChild(Field1) : null;
-    mainUIContainer.addChild(Field2);
-    mainUIContainer.addChild(Field3);
-    mainUIContainer.addChild(Field4);
-    mainUIContainer.addChild(Field5);
-    mainUIContainer.addChild(Field6);
-    mainUIContainer.addChild(Field7);
-    mainUIContainer.addChild(Field8);
-    mainUIContainer.addChild(Field9);
+    (hoeStats.counter && Settings.showCounter) ? mainUIContainer.addChild(Field1) : null;
+    if(Settings.showCultivating) mainUIContainer.addChild(Field2);
+    if(Settings.showFarmingFortune) mainUIContainer.addChild(Field3);
+    if(Settings.showBlocksS) mainUIContainer.addChild(FieldBlockBreak);
+    if(Settings.showYieldEfficiency) mainUIContainer.addChild(Field4);
+    if(Settings.showMaxYield) mainUIContainer.addChild(Field5);
+    if(Settings.showExpectedProfit) mainUIContainer.addChild(Field6);
+    if(Settings.showCollection) mainUIContainer.addChild(Field7);
+    if(Settings.showYaw) mainUIContainer.addChild(Field8);
+    if(Settings.showPitch) mainUIContainer.addChild(Field9);
 
     if(gui.isOpen()){
         mainUIContainer.setColor(new ConstantColorConstraint(getJavaColor(new Color(1, 1, 1, 0.2))));

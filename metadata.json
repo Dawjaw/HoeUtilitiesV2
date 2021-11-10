@@ -4,5 +4,5 @@
   "entry": "index.js",
   "requires": ["Vigilance", "requestV2", "PromiseV2", "Elementa"],
   "description": "Rework of the popular module HoeUtilities.",
-  "version": "1.2.1"
+  "version": "1.3.0"
 }

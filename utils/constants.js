@@ -182,6 +182,7 @@ export let globalStats = {
     jacobEvents: undefined,
     timeUntilJacobs: "",
     nextJacobCrops: undefined,
+    blockPerSeconds: 0,
     getters: {
         getTimeLeftUntilNextLevel: () => globalStats._timeLeftUntilNextLevel,
         getAnita: () => globalStats._anita,
@@ -205,6 +206,7 @@ export let globalStats = {
         getJacobEvents: () => globalStats._jacobEvents,
         getTimeUntilJacobs: () => globalStats._timeUntilJacobs,
         getNextJacobCrops: () => globalStats._nextJacobCrops,
+        getBlockPerSeconds: () => globalStats._blockPerSeconds,
     },
     setters: {
         setTimeLeftUntilNextLevel: (timeLeftUntilNextLevel) => globalStats._timeLeftUntilNextLevel = timeLeftUntilNextLevel,
@@ -229,6 +231,7 @@ export let globalStats = {
         setJacobEvents: (jacobEvents) => globalStats._jacobEvents = jacobEvents,
         setTimeUntilJacobs: (timeUntilJacobs) => globalStats._timeUntilJacobs = timeUntilJacobs,
         setNextJacobCrops: (nextJacobCrops) => globalStats._nextJacobCrops = nextJacobCrops,
+        setBlockPerSeconds: (blockPerSeconds) => globalStats._blockPerSeconds = blockPerSeconds,
     },
 }
 

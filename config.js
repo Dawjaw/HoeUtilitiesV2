@@ -52,6 +52,142 @@ class Settings {
     //-----------------------------------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------
 
+    // Toggle Tool Lines
+
+    @SwitchProperty({
+        name: "Toggle Counter Display",
+        description: "Enable/Disable Counter Display Line",
+        category: "Features",
+        subcategory: "Toggle Tool Features",
+    })
+    showCounter = true;
+
+    @SwitchProperty({
+        name: "Toggle Cultivating Display",
+        description: "Enable/Disable Cultivating Display Line",
+        category: "Features",
+        subcategory: "Toggle Tool Features",
+    })
+    showCultivating = true;
+
+    @SwitchProperty({
+        name: "Toggle Farming Fortune Display",
+        description: "Enable/Disable Farming Fortune Display Line",
+        category: "Features",
+        subcategory: "Toggle Tool Features",
+    })
+    showFarmingFortune = true;
+
+    @SwitchProperty({
+        name: "Toggle Blocks/s Display",
+        description: "Enable/Disable Blocks/s Display Line",
+        category: "Features",
+        subcategory: "Toggle Tool Features",
+    })
+    showBlocksS = true;  
+
+    @SwitchProperty({
+        name: "Toggle Yield Efficiency Display",
+        description: "Enable/Disable Yield Efficiency Display Line",
+        category: "Features",
+        subcategory: "Toggle Tool Features",
+    })
+    showYieldEfficiency = true;  
+
+    @SwitchProperty({
+        name: "Toggle Max Yield Display",
+        description: "Enable/Disable Max Yield Display Line",
+        category: "Features",
+        subcategory: "Toggle Tool Features",
+    })
+    showMaxYield = true;  
+
+    @SwitchProperty({
+        name: "Toggle Expected Profit Display",
+        description: "Enable/Disable Expected Profit Display Line",
+        category: "Features",
+        subcategory: "Toggle Tool Features",
+    })
+    showExpectedProfit = true;  
+
+    @SwitchProperty({
+        name: "Toggle Collection Display",
+        description: "Enable/Disable Collection Display Line",
+        category: "Features",
+        subcategory: "Toggle Tool Features",
+    })
+    showCollection = true;  
+
+    @SwitchProperty({
+        name: "Toggle Yaw Display",
+        description: "Enable/Disable Yaw Display Line",
+        category: "Features",
+        subcategory: "Toggle Tool Features",
+    })
+    showYaw = true;  
+
+    @SwitchProperty({
+        name: "Toggle Pitch Display",
+        description: "Enable/Disable Pitch Display Line",
+        category: "Features",
+        subcategory: "Toggle Tool Features",
+    })
+    showPitch = true;  
+
+    // Toggle XP Lines
+
+    @SwitchProperty({
+        name: "Toggle Current Level Display",
+        description: "Enable/Disable Current Level Display Line",
+        category: "Features",
+        subcategory: "Toggle XP Features",
+    })
+    showCurrentLevel = true;  
+
+    @SwitchProperty({
+        name: "Toggle Current XP Display",
+        description: "Enable/Disable Current XP Display Line",
+        category: "Features",
+        subcategory: "Toggle XP Features",
+    })
+    showCurrentXP = true;  
+
+    @SwitchProperty({
+        name: "Toggle XP Until next Level Display",
+        description: "Enable/Disable XP Until next Level Display Line",
+        category: "Features",
+        subcategory: "Toggle XP Features",
+    })
+    showXPUntilNextLevel = true;  
+
+    @SwitchProperty({
+        name: "Toggle Time Until Next Level Display",
+        description: "Enable/Disable Time Until Next Level Display Line",
+        category: "Features",
+        subcategory: "Toggle XP Features",
+    })
+    showTimeUntilNextLevel = true;  
+
+    @SwitchProperty({
+        name: "Toggle XP Per Hour Display",
+        description: "Enable/Disable XP Per Hour Display Line",
+        category: "Features",
+        subcategory: "Toggle XP Features",
+    })
+    showXPPerHour = true;  
+
+    @SwitchProperty({
+        name: "Toggle Max XP Per Hour Display",
+        description: "Enable/Disable Max XP Per Hour Display Line",
+        category: "Features",
+        subcategory: "Toggle XP Features",
+    })
+    showMaxXPPerHour = true;  
+
+    //-----------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+
     // Tool Info Gui location
     @SwitchProperty({
         name: "Toggle Tool Info",
