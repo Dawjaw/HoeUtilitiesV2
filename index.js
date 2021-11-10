@@ -274,7 +274,6 @@ register('step', () => {
     aggregateFarmingFortune();
     resetLiveCounters();
     handleJacobsEvents();
-    handleBlockBreaksPerSecond();
 
     if (preload === 0) guiPreload();
 }).setDelay(1);
