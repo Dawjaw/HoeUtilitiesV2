@@ -239,7 +239,7 @@ register("renderOverlay", () => {
 let tickStep = 0;
 register('tick', () => {
     const heldItem = Player.getHeldItem().getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
-    playerInformation.toolIsEquipped = !!heldItem.getString('id').match(/HOE_(CANE|POTATO|CARROT|WHEAT|WARTS)|DICER|COCO_CHOPPER|CACTUS_KNIFE|FUNGI_CUTTER/);
+    playerInformation.toolIsEquipped = !!heldItem.getString('id').match(/HOE_(CANE|POTATO|CARROT|WHEAT|WARTS)|DICER|COCO_CHOPPER|CACTUS_KNIFE|FUNGI_CUTTER|ROOKIE_HOE|DIAMOND_HOE/);
     if (playerInformation.toolIsEquipped) {
         playerInformation.toolType = (['pumpkin', 'melon', 'cocoa'].includes(playerInformation.crop)) ? 'Axe' : 'Hoe';
     }

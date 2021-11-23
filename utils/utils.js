@@ -2,7 +2,6 @@ import Settings from "../config";
 import {baseCropDrops, playerInformation, collectionTypeToBlocks, colors, units, configLocation, hoeStats, collection, globalStats} from "./constants";
 const Color = Java.type("java.awt.Color");
 
-
 export function addCommas(str) {
     str = String(str);
     return str.replace(/\B(?=(\d{3})+(?!\d))/g, ",");

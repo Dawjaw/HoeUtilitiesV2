@@ -61,6 +61,10 @@ export function updateHoeStats() {
         }
     }
 
+    if (heldItem.getString('id').match("COCO_CHOPPER")) {
+        hoeStats.itemRate += 20;
+    }
+
     // Turbo
     turboEnchants.forEach(enchant => {
         if (heldItem.getCompoundTag('enchantments').getInteger(enchant) && toolToTurboEnchant[playerInformation.crop] === enchant) {
