@@ -32,17 +32,33 @@ function turnToNumber(value) {
 }
 
 export function createJacobTimerGui() {
-    if (!globalStats.timeUntilJacobs) return;
-    const textElement = new UIText(`${globalStats.timeUntilJacobs}`)
-        .setX((Settings.jacob_x + 50).pixels())
+    let uiText = "";
+    let color = "";
+    let spacing = 60;
+    if (!globalStats.timeUntilJacobs) {
+        uiText = "No Events Found";
+        color = "§c";
+        spacing = 5;
+    } else {
+        uiText = `${globalStats.timeUntilJacobs}`;
+    }
+    const textElement = new UIText(`${color}${uiText}`)
+        .setX((Settings.jacob_x + spacing).pixels())
         .setY((Settings.jacob_y + 6).pixels());
 
     return textElement;
 }
 
 export function createJacobTimerGuiContainer() {
-    if (!Settings.showJacobTimer || !globalStats.nextJacobCrops) return;
-
+    if (!Settings.showJacobTimer || !globalStats.nextJacobCrops) {
+        const tmpW = new UIRoundedRectangle(3)
+            .setX((Settings.jacob_x).pixels())
+            .setY((Settings.jacob_y).pixels())
+            .setWidth((100).pixels())
+            .setHeight((20).pixels())
+            .setColor(new ConstantColorConstraint(getJavaColor(new Color(Settings.xpInfoBackgroundColor.getRed()/255, Settings.xpInfoBackgroundColor.getGreen()/255, Settings.xpInfoBackgroundColor.getBlue()/255, Settings.xpInfoBackgroundColor.getAlpha()/255))));
+        return tmpW;
+    }
     //console.log(JSON.stringify(globalStats.nextJacobCrops));
     //console.log(globalStats.nextJacobCrops[0]);
 
