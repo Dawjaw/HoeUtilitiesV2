@@ -32,6 +32,7 @@ function turnToNumber(value) {
 }
 
 export function createJacobTimerGui() {
+    if (!globalStats.timeUntilJacobs) return;
     const textElement = new UIText(`${globalStats.timeUntilJacobs}`)
         .setX((Settings.jacob_x + 50).pixels())
         .setY((Settings.jacob_y + 6).pixels());
