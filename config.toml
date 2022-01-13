@@ -1,0 +1,91 @@
+
+[general]
+	firstrun = true
+	apikey = "ef150659-fe0a-4b1c-a1c8-3c08d27fc5d1"
+
+	[general.gui]
+		show_legacy_gui = false
+
+	[general."jacob's_event"]
+		jacoby = 3.00213623046875
+		jacobx = 3.5
+		toggle_next_jacobs_event = true
+
+[features]
+
+	[features.toggle_xp_features]
+		toggle_xp_per_hour_display = true
+		toggle_max_xp_per_hour_display = true
+		toggle_time_until_next_level_display = true
+		toggle_xp_until_next_level_display = true
+		toggle_current_level_display = true
+		toggle_current_xp_display = true
+
+	[features.toggle_tool_features]
+		"toggle_blocks/s_display" = true
+		toggle_farming_fortune_display = true
+		toggle_yield_efficiency_display = true
+		toggle_max_yield_display = true
+		toggle_pitch_display = true
+		toggle_collection_display = true
+		toggle_cultivating_display = true
+		toggle_expected_profit_display = true
+		toggle_yaw_display = true
+		toggle_counter_display = true
+
+[primary_text_color]
+	potato = 1
+	nether_warts = 12
+	cactus = 7
+	wheat = 6
+	cane = 2
+	melon = 2
+	pumpkin = 6
+	mushroom = 4
+	cocoa = 11
+	carrot = 15
+
+[xp]
+
+	[xp.customization]
+		xp_info_background_color = "50,0,0,0"
+		text_alignment = 0
+		scale = 100
+
+	[xp.gui]
+		toggle_xp_info = true
+		xpinfoy = 137.50875854492188
+		xpinfox = 2.5
+
+[tools]
+
+	[tools.functions]
+		max_yield_measurement_unit = 0
+
+	[tools.customization]
+		tool_info_background_color = "50,0,0,0"
+		text_alignment = 0
+		scale = 100
+
+	[tools.gui]
+		toggle_tool_info = true
+		toolinfoy = 26.50103759765625
+		toolinfox = 3.0
+		"raw_pitch/yaw_data" = 0
+
+	[tools.live_tracker]
+		live_tracker_measurement_unit = 0
+		live_tracker_buffer_size = 60
+
+[secondary_text_color]
+	potato = 7
+	nether_warts = 7
+	cactus = 7
+	wheat = 7
+	cane = 7
+	melon = 7
+	pumpkin = 7
+	mushroom = 7
+	cocoa = 7
+	carrot = 7
+
