@@ -258,8 +258,15 @@ register('tick', () => {
 register('step', () => {
     // update Hoe Information
     if (!Player.lookingAt().toString().startsWith("Entity") && !Player.lookingAt().toString().startsWith("BlockType")) { 
-        if (checkInput(Player.lookingAt().getType().getRegistryName().toString().split(':')[1], farmingBlockTypes)) {
-            blockLookingAt = Player.lookingAt().getType().getRegistryName().toString().split(':')[1];
+        if (ChatTriggers.MODVERSION.split(".")[0] === "1") {
+            if (checkInput(Player.lookingAt().getRegistryName().toString().split(':')[1], farmingBlockTypes)) {
+                blockLookingAt = Player.lookingAt().getRegistryName().toString().split(':')[1];
+                playerInformation.crop = blocksToCollectionType[blockLookingAt];
+            }
+        } else {    
+            if (checkInput(Player.lookingAt().getType().getRegistryName().toString().split(':')[1], farmingBlockTypes)) {
+                blockLookingAt = Player.lookingAt().getType().getRegistryName().toString().split(':')[1];
+            }
         }
     }
 
@@ -337,15 +344,39 @@ function handleBlockBreakEvent() {
 
 // working block break trigger used in 2.0.0+ versions
 register('blockBreak', (block, player, event) => {
-    const ageBlockList = ['carrot', 'potato', 'wheat', 'cocoa', 'wart'];
-    const nonAgeBlockList = ['mushroom', 'melon', 'pumpkin', 'cane'];
-    playerInformation.crop = blocksToCollectionType[block.type.getRegistryName().split(":")[1]];
-    if(nonAgeBlockList.includes(playerInformation.crop)) {
-        handleBlockBreakEvent();
-    } if(ageBlockList.includes(playerInformation.crop)) {
-        let blockAge = block.getState().toString().match(/[0-9]+/)[0];
-        if(blockAge === blockMaxAge[playerInformation.crop]) {
+    if (ChatTriggers.MODVERSION.split(".")[0] === "2") {
+        const ageBlockList = ['carrot', 'potato', 'wheat', 'cocoa', 'wart'];
+        const nonAgeBlockList = ['mushroom', 'melon', 'pumpkin', 'cane'];
+        playerInformation.crop = blocksToCollectionType[block.type.getRegistryName().split(":")[1]];
+        if(nonAgeBlockList.includes(playerInformation.crop)) {
             handleBlockBreakEvent();
+        } if(ageBlockList.includes(playerInformation.crop)) {
+            let blockAge = block.getState().toString().match(/[0-9]+/)[0];
+            if(blockAge === blockMaxAge[playerInformation.crop]) {
+                handleBlockBreakEvent();
+            }
+        }
+    }
+});
+
+// trigger to increase Collection
+let S29PacketSoundEffect = Java.type("net.minecraft.network.play.server.S29PacketSoundEffect").class.toString();
+register('packetReceived', (packet, event) => {
+    if (ChatTriggers.MODVERSION.split(".")[0] === "1") {
+        if (packet.class.toString().equals(S29PacketSoundEffect)) {
+            if (packet.func_149212_c().equals("random.orb")) {
+                if (packet.func_149209_h().toString() !== "1.4920635223388672") {
+                    let reduced = false;
+                    if (nonFarmingDingSoundCounter > 0) {
+                        if (!reduced) {
+                            nonFarmingDingSoundCounter--;
+                            return;
+                        }
+                        nonFarmingDingSoundCounter -= 1;
+                    }
+                    handleBlockBreakEvent();
+                }
+            }
         }
     }
 });
