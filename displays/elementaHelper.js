@@ -121,7 +121,7 @@ export function createJacobTimerGuiContainer() {
 }
 
 export function createXPInfoGuiContainer() {
-    if (!Settings.showXpInfo || !playerInformation.toolIsEquipped || Settings.showLegacyGUI) {
+    if (!Settings.showXpInfo || !playerInformation.toolIsEquipped) {
         return;
     }
     const Field1 = createNewTextElement("Current Level", (globalStats.currentLevel) ? addCommas(Math.round(globalStats.currentLevel)) : "Start farming!");
@@ -170,7 +170,7 @@ export function createXPInfoGuiContainer() {
 }
 
 export function createToolInfoGuiContainer() {
-    if (!Settings.showToolInfo || !playerInformation.toolIsEquipped || Settings.showLegacyGUI) {
+    if (!Settings.showToolInfo || !playerInformation.toolIsEquipped) {
         return;
     }
     const maxYield = getMaxEfficiencyYield(playerInformation.total, playerInformation.crop);

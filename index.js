@@ -191,7 +191,6 @@ register("renderOverlay", () => {
                     xpInfoWindow = getXpInfoWindow();
                     mainWindow.addChild(xpInfoWindow);
                 }
-                mainWindow.draw();
             } else {
                 mainWindow.removeChild(toolInfoWindow);
                 mainWindow.removeChild(xpInfoWindow);
@@ -225,10 +224,9 @@ register("renderOverlay", () => {
                 lastCrops = JSON.stringify(globalStats.nextJacobCrops);
             }
             if(!playerInformation.toolIsEquipped){
-                mainWindow.draw();
             }
+            mainWindow.draw();
         }
-
     } catch (e) {
         console.log("Error renderOverlay", e.stack);
         console.log("Error", e.name);

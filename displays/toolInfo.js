@@ -7,7 +7,7 @@ import {
     getCultivatingCount,
     getMaxEfficiencyYield
 } from "../utils/utils";
-import {alignment, units, hoeStats, collection, playerInformation} from "../utils/constants";
+import {alignment, units, hoeStats, collection, playerInformation, globalStats} from "../utils/constants";
 
 export function initializeToolInfo() {
 
@@ -31,16 +31,17 @@ export function renderToolInfo(toolInfo, liveYield, cropGain) {
     toolInfo.setShouldRender(true);
 
     // add lines
-    displayLines.push(new DisplayLine(buildDisplayLine(`&lTool Info`, null)).setScale(0.25 + (Settings.toolInfoScale/100)));
+    if (Settings.showToolInfo) displayLines.push(new DisplayLine(buildDisplayLine(`&lTool Info`, null)).setScale(0.25 + (Settings.toolInfoScale/100)));
     if (counter !== undefined) displayLines.push(new DisplayLine(buildDisplayLine(`Counter`, addCommas(counter))));
     if (hoeStats.cultivating !== undefined) displayLines.push(new DisplayLine(buildDisplayLine(`Cultivating`, addCommas(getCultivatingCount()))));
-    displayLines.push(new DisplayLine(buildDisplayLine(`Farming Fortune`, `${playerInformation.total} §6☘`)));
-    displayLines.push(new DisplayLine(buildDisplayLine(`Live Yield`, (`${(liveYield !== undefined) ? liveYield : 0}${units[Settings.liveTrackerUnit]}`))));
-    displayLines.push(new DisplayLine(buildDisplayLine(`Max Yield`, getMaxEfficiencyYield(playerInformation.total, playerInformation.crop))));
-    displayLines.push(new DisplayLine(buildDisplayLine(`Expected Profit`, (cropGain) ? (cropGain+"/h") : "0/h")));
-    displayLines.push(new DisplayLine(buildDisplayLine(`Collection`, addCommas(Math.floor(collection[playerInformation.crop])))));
-    displayLines.push(new DisplayLine(buildDisplayLine(`Yaw`, calcRotation(`Yaw`))));
-    displayLines.push(new DisplayLine(buildDisplayLine(`Pitch`, calcRotation(`Pitch`))));
+    if (Settings.showFarmingFortune) displayLines.push(new DisplayLine(buildDisplayLine(`Farming Fortune`, `${playerInformation.total} §6☘`)));
+    if (Settings.showBlocksS) displayLines.push(new DisplayLine(buildDisplayLine(`Blocks/s`, `${globalStats.blockPerSeconds.toFixed(3)}`)));
+    if (Settings.showYieldEfficiency) displayLines.push(new DisplayLine(buildDisplayLine(`Live Yield`, (`${(liveYield !== undefined) ? liveYield : 0}${units[Settings.liveTrackerUnit]}`))));
+    if (Settings.showMaxYield) displayLines.push(new DisplayLine(buildDisplayLine(`Max Yield`, getMaxEfficiencyYield(playerInformation.total, playerInformation.crop))));
+    if (Settings.showExpectedProfit) displayLines.push(new DisplayLine(buildDisplayLine(`Expected Profit`, (globalStats.cropGain) ? (globalStats.cropGain+"/h") : "0/h")));
+    if (Settings.showCollection) displayLines.push(new DisplayLine(buildDisplayLine(`Collection`, addCommas(Math.floor(collection[playerInformation.crop])))));
+    if (Settings.showYaw) displayLines.push(new DisplayLine(buildDisplayLine(`Yaw`, calcRotation(`Yaw`))));
+    if (Settings.showPitch) displayLines.push(new DisplayLine(buildDisplayLine(`Pitch`, calcRotation(`Pitch`))));
 
     // formatting
     displayLines.forEach((line, i) => {

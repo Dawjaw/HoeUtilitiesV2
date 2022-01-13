@@ -24,13 +24,16 @@ export function renderXpInfo(xpInfo, xpPerHour) {
     xpInfo.setShouldRender(true);
 
     // add lines globalStats.timeLeftUntilNextLevel
-    displayLines.push(new DisplayLine(buildDisplayLine("&lXP Info", null)).setScale(0.25 + (Settings.xpInfoScale/100)));
-    displayLines.push(new DisplayLine(buildDisplayLine("Current Level", (globalStats.currentLevel ? addCommas(Math.round(globalStats.currentLevel)) : "Start farming!"))));
-    displayLines.push(new DisplayLine(buildDisplayLine("Current XP", (globalStats.currentLevelXP ? addCommas(Math.round(globalStats.currentLevelXP)) : "Start farming!"))));
-    displayLines.push(new DisplayLine(buildDisplayLine("XP Until next Level", (globalStats.xpUntilNextLevel ? addCommas(Math.round(globalStats.xpUntilNextLevel)) : "Start farming!"))));
-    displayLines.push(new DisplayLine(buildDisplayLine("Time until next Level", (!globalStats.timeLeftUntilNextLevel.includes("NaN")) ? globalStats.timeLeftUntilNextLevel : "Start farming!")));
-    displayLines.push(new DisplayLine(buildDisplayLine("XP Per Hour", (xpPerHour ? addCommas(xpPerHour) : "Start farming!"))));
-    displayLines.push(new DisplayLine(buildDisplayLine("Expected XP Per Hour", (globalStats.xpPerHourExpected ? addCommas(Math.round(globalStats.xpPerHourExpected)) : "Start farming!"))));
+    if (Settings.showXpInfo) displayLines.push(new DisplayLine(buildDisplayLine("&lXP Info", null)).setScale(0.25 + (Settings.xpInfoScale/100)));
+    if (Settings.showCurrentLevel) displayLines.push(new DisplayLine(buildDisplayLine("Current Level", (globalStats.currentLevel ? addCommas(Math.round(globalStats.currentLevel)) : "Start farming!"))));
+    if (Settings.showCurrentXP && !Number.isNaN(globalStats.currentLevelXP)) displayLines.push(new DisplayLine(buildDisplayLine("Current XP", (globalStats.currentLevelXP ? addCommas(Math.round(globalStats.currentLevelXP)) : "Start farming!"))));
+    if(Number.isNaN(globalStats.currentLevelXP)) {
+        displayLines.push(new DisplayLine(buildDisplayLine("Current XP", (globalStats.currentXP ? globalStats.currentXP : "Start farming!"))));
+    }
+    if (Settings.showXPUntilNextLevel && globalStats.currentLevel !== 60) displayLines.push(new DisplayLine(buildDisplayLine("XP Until next Level", (globalStats.xpUntilNextLevel ? addCommas(Math.round(globalStats.xpUntilNextLevel)) : "Start farming!"))));
+    if (Settings.showTimeUntilNextLevel && globalStats.currentLevel !== 60) displayLines.push(new DisplayLine(buildDisplayLine("Time until next Level", (!globalStats.timeLeftUntilNextLevel.includes("NaN")) ? globalStats.timeLeftUntilNextLevel : "Start farming!")));
+    if (Settings.showXPPerHour) displayLines.push(new DisplayLine(buildDisplayLine("XP Per Hour", (xpPerHour ? addCommas(xpPerHour) : "Start farming!"))));
+    if (Settings.showMaxXPPerHour) displayLines.push(new DisplayLine(buildDisplayLine("Expected XP Per Hour", (globalStats.xpPerHourExpected ? addCommas(Math.round(globalStats.xpPerHourExpected)) : "Start farming!"))));
 
     // formatting
     displayLines.forEach((line, i) => {
