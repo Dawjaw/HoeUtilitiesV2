@@ -1,2 +1,12 @@
-config.toml
+/config.toml
+/jsconfig.json 
 
+/.vscode
+
+/.idea
+
+.gitignore
+
+/config.toml.backup
+
+/jacobs.json
