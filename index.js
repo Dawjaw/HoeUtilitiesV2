@@ -180,6 +180,11 @@ register('renderOverlay', guiMover);
 register("renderOverlay", () => {
     try {
         if (preload === 1) {
+            if (jacobTimerWasDisabled) {
+                jacobTimerWindow = getJacobTimerWindow();
+                lastCrops = "disabled";
+                mainWindow.clearChildren();
+            }
             if (playerInformation.toolIsEquipped && !Settings.showLegacyGUI) {
                 mainWindow.removeChild(toolInfoWindow);
                 mainWindow.removeChild(xpInfoWindow);
@@ -197,21 +202,13 @@ register("renderOverlay", () => {
             }
             if(!Settings.showJacobTimer) {
                 jacobTimerWasDisabled = true;
-                mainWindow.removeChild(jacobTimerWindow);
-                mainWindow.removeChild(jacobTimerText);
             }
             if(Settings.showJacobTimer && jacobTimerWindow && lastCrops !== JSON.stringify(globalStats.nextJacobCrops)) {
                 mainWindow.removeChild(jacobTimerWindow);
                 jacobTimerWindow = getJacobTimerWindow();
                 mainWindow.addChild(jacobTimerWindow);
                 lastCrops = JSON.stringify(globalStats.nextJacobCrops);
-            } else if (jacobTimerWasDisabled) {
-                mainWindow.removeChild(jacobTimerWindow);
-                jacobTimerWindow = getJacobTimerWindow();
-                mainWindow.addChild(jacobTimerWindow);
-                lastCrops = JSON.stringify(globalStats.nextJacobCrops);
-                jacobTimerWasDisabled = false;
-            }
+            } 
             if(Settings.showJacobTimer && jacobTimerText) {
                 mainWindow.removeChild(jacobTimerText);
                 jacobTimerText = getJacobTimerTimer();
