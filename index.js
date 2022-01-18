@@ -13,8 +13,27 @@ import { guiMover, initiateGuiMover } from "./displays/guiMover";
 import { calculateXpPerHour } from "./features/xpPerHour";
 import { calculateYieldPerHour } from "./features/yield";
 import {
+    AdditiveConstraint,
+    animate,
+    Animations,
+    CenterConstraint,
+    ChildBasedMaxSizeConstraint,
+    ChildBasedSizeConstraint,
+    ConstantColorConstraint,
+    FillConstraint,
+    ScissorEffect,
+    SiblingConstraint,
+    SubtractiveConstraint,
+    UIBlock,
+    UIMultilineTextInput,
+    UIText,
+    WindowScreen,
+  } from "../Elementa";
+import {
     Window
 } from "Elementa/index";
+
+const Color = Java.type("java.awt.Color");
 
 // init variables
 let API_C = {
@@ -233,12 +252,13 @@ register("renderOverlay", () => {
 
 let tickStep = 0;
 register('tick', () => {
-    const heldItem = Player.getHeldItem().getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
-    playerInformation.toolIsEquipped = !!heldItem.getString('id').match(/HOE_(CANE|POTATO|CARROT|WHEAT|WARTS)|DICER|COCO_CHOPPER|CACTUS_KNIFE|FUNGI_CUTTER|ROOKIE_HOE|DIAMOND_HOE/);
-    if (playerInformation.toolIsEquipped) {
-        playerInformation.toolType = (['pumpkin', 'melon', 'cocoa'].includes(playerInformation.crop)) ? 'Axe' : 'Hoe';
+    if(Player.getHeldItem()) {
+        const heldItem = Player.getHeldItem().getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
+        playerInformation.toolIsEquipped = !!heldItem.getString('id').match(/HOE_(CANE|POTATO|CARROT|WHEAT|WARTS)|DICER|COCO_CHOPPER|CACTUS_KNIFE|FUNGI_CUTTER|ROOKIE_HOE|DIAMOND_HOE/);
+        if (playerInformation.toolIsEquipped) {
+            playerInformation.toolType = (['pumpkin', 'melon', 'cocoa'].includes(playerInformation.crop)) ? 'Axe' : 'Hoe';
+        }
     }
-
     // render lines
     tickStep++;
     if (tickStep === 3) {

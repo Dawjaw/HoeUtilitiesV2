@@ -61,6 +61,7 @@ export function calcRotation(plane) {
 }
 
 export function getMaxEfficiencyYield(cropRate, crop) {
+    if(Player.getHeldItem() === null) return 0;
     const heldItem = Player.getHeldItem().getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
     let randomDrops = 0;
     let unit = units[Settings.maxYieldUnit];

@@ -8,7 +8,7 @@ function checkInput(input, words) {
 
 export function updateHoeStats() {
 
-    if (Player.getHeldItem().getRawNBT() === null) return;
+    if (Player.getHeldItem()?.getRawNBT() === null) return;
     try {
         if (Player.getHeldItem().getRawNBT().match(/Lore:(\[.+\])/)[1].replace(/\d+:/g, '') === null) return;
     } catch (e) {
@@ -116,8 +116,10 @@ export function aggregateFarmingFortune() {
 export function updateGlobalFarmingStats(xpPerHour) {
     if(!World.isLoaded()) return;
     // get FFD
-    const heldItem = Player.getHeldItem().getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
-    globalStats.fFD = heldItem.getInteger('farming_for_dummies_count');
+    if (Player.getHeldItem()) {
+        const heldItem = Player.getHeldItem().getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
+        globalStats.fFD = heldItem.getInteger('farming_for_dummies_count');
+    }
 
     // get Elephant level
     let playerName = Player.getName();

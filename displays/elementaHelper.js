@@ -4,7 +4,7 @@ import {
     SiblingConstraint, ChildBasedSizeConstraint,
     ConstantColorConstraint, AdditiveConstraint,
     ScaledTextConstraint, StencilEffect, ScissorEffect, UIBlock, RelativeConstraint, AspectConstraint, TextAspectConstraint, FillConstraint, CramSiblingConstraint, SubtractiveConstraint, MaxConstraint
-} from "Elementa/index";
+} from "../../Elementa";
 import {
     addCommas,
     buildDisplayLine,
@@ -51,12 +51,12 @@ export function createJacobTimerGui() {
 
 export function createJacobTimerGuiContainer() {
     if (!Settings.showJacobTimer || !globalStats.nextJacobCrops) {
-        const tmpW = new UIRoundedRectangle(3.0)
+        const tmpW = new UIRoundedRectangle(3)
             .setX((Settings.jacob_x).pixels())
             .setY((Settings.jacob_y).pixels())
             .setWidth((100).pixels())
             .setHeight((20).pixels())
-            .setColor(new ConstantColorConstraint(getJavaColor(new Color(Settings.xpInfoBackgroundColor.getRed()/255, Settings.xpInfoBackgroundColor.getGreen()/255, Settings.xpInfoBackgroundColor.getBlue()/255, Settings.xpInfoBackgroundColor.getAlpha()/255))));
+            .setColor(new ConstantColorConstraint(new Color(Settings.xpInfoBackgroundColor.getRed()/255, Settings.xpInfoBackgroundColor.getGreen()/255, Settings.xpInfoBackgroundColor.getBlue()/255, Settings.xpInfoBackgroundColor.getAlpha()/255)));
         return tmpW;
     }
 
