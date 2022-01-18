@@ -51,7 +51,7 @@ export function createJacobTimerGui() {
 
 export function createJacobTimerGuiContainer() {
     if (!Settings.showJacobTimer || !globalStats.nextJacobCrops) {
-        const tmpW = new UIRoundedRectangle(3)
+        const tmpW = new UIRoundedRectangle(3.0)
             .setX((Settings.jacob_x).pixels())
             .setY((Settings.jacob_y).pixels())
             .setWidth((100).pixels())
@@ -59,8 +59,6 @@ export function createJacobTimerGuiContainer() {
             .setColor(new ConstantColorConstraint(getJavaColor(new Color(Settings.xpInfoBackgroundColor.getRed()/255, Settings.xpInfoBackgroundColor.getGreen()/255, Settings.xpInfoBackgroundColor.getBlue()/255, Settings.xpInfoBackgroundColor.getAlpha()/255))));
         return tmpW;
     }
-    //console.log(JSON.stringify(globalStats.nextJacobCrops));
-    //console.log(globalStats.nextJacobCrops[0]);
 
     const file = new File(`config/ChatTriggers/images/${cropToImage[globalStats.nextJacobCrops[0]]}.png`);
     const file2 = new File(`config/ChatTriggers/images/${cropToImage[globalStats.nextJacobCrops[1]]}.png`);
