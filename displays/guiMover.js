@@ -1,6 +1,5 @@
 import Settings from "../config";
 import gui, {elementaStuff, mouseInformation} from "../utils/constants";
-import {updateSetting} from "../utils/utils";
 
 export function initiateGuiMover(toolInfo, xpInfo) {
     //selection
@@ -46,14 +45,7 @@ export function initiateGuiMover(toolInfo, xpInfo) {
 
     function releaseFunc() {
         //update data
-        updateSetting("toolinfox", Settings.tool_gui_x)
-        updateSetting("toolinfoy", Settings.tool_gui_y)
-
-        updateSetting("xpinfox", Settings.xp_gui_x)
-        updateSetting("xpinfoy", Settings.xp_gui_y)
-
-        updateSetting("jacobx", Settings.jacob_x)
-        updateSetting("jacoby", Settings.jacob_y)
+        Settings.save();
 
         //reset
         isObjectSelected = false;

@@ -7,7 +7,7 @@ import { initializeToolInfo, renderToolInfo } from "./displays/toolInfo";
 import { getToolInfoWindow, getXpInfoWindow, getJacobTimerWindow, getJacobTimerTimer } from "./displays/elementaDisplay";
 import { aggregateFarmingFortune, updateGlobalFarmingStats, updateHoeStats } from "./updateInformation";
 import { getApiData, getBazaarData, getJacobEvents } from "./utils/getApiData";
-import { addCommas, memorySizeOf, addCropDrop, checkInput, getCropDrop, resetGlobalFarmingInformation, updateSetting } from "./utils/utils";
+import { addCommas, memorySizeOf, addCropDrop, checkInput, getCropDrop, resetGlobalFarmingInformation } from "./utils/utils";
 import { initializeXpInfo, renderXpInfo } from "./displays/xpInfo";
 import { guiMover, initiateGuiMover } from "./displays/guiMover";
 import { calculateXpPerHour } from "./features/xpPerHour";
@@ -143,7 +143,7 @@ register("command", (arg1, arg2) => {
     }
     if (arg1 === "key" && arg2 !== undefined && arg2.length === 36) {
         Settings.apiKey = arg2;
-        updateSetting("apikey", `"${arg2}"`);
+        Settings.save();
         ChatLib.chat("§eSet api key!")
         ChatLib.command("ct load", true);
     } else if (arg1 === "key" && arg2 === undefined) ChatLib.chat("§eInvalid command usage or invalid key");
@@ -163,7 +163,7 @@ register("command", (arg1, arg2) => {
 
 register('chat', (key) => {
     Settings.apiKey = key;
-    updateSetting("apikey", `"${key}"`);
+    Settings.save();
     ChatLib.chat("§eSet api key!")
     ChatLib.command("ct load", true);
 }).setCriteria("Your new API key is ${key}");
@@ -191,7 +191,8 @@ if (!Settings.firstRun) {
     const image10 = new Image("wart.png", "https://jacobs.jeanlaurent.fr/assets/img/nether_wart.png");
 }
 
-updateSetting("firstrun", true);
+Settings.firstRun = true;
+Settings.save();
 
 // gui move
 initiateGuiMover(toolInfo, xpInfo);

@@ -166,28 +166,6 @@ export function buildDisplayLine(string, value){
     return ` ${pc}[${sc}${string}${pc}]§f: ${value}`;
 }
 
-export function updateSetting(setting, value){
-    let lineBuffer = "";
-    let fileBuffer = "";
-    let file = FileLib.read(configLocation);
-
-    for (let i in file){
-        if(file[i] !== "\n"){
-            lineBuffer = lineBuffer.concat(file[i]);
-        } else{
-            if(lineBuffer.includes(setting)){
-                lineBuffer = `${lineBuffer.split(setting.charAt(0))[0]}${setting} = ${value}\r\n`;
-                fileBuffer = fileBuffer.concat(lineBuffer);
-                lineBuffer = "";
-            } else{
-                fileBuffer = fileBuffer.concat(lineBuffer+="\n");
-                lineBuffer = "";
-            }
-        }
-    }
-    FileLib.write(configLocation, fileBuffer);
-}
-
 // made by https://gist.github.com/zensh/4975495
 export function memorySizeOf(obj) {
     var bytes = 0;

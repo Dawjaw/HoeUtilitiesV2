@@ -14,8 +14,7 @@ import {
     getCultivatingCount,
     getMaxEfficiencyYield,
     getScale,
-    calcRotation,
-    updateSetting
+    calcRotation
 } from "../utils/utils";
 import gui, {playerInformation, globalStats, elementaStuff, hoeStats, collection, elementaStuff, mouseInformation, cropToImage} from "../utils/constants";
 import Settings from "../config";
