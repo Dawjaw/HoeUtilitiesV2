@@ -205,7 +205,6 @@ register("renderOverlay", () => {
                 lastCrops = "disabled";
                 mainWindow.clearChildren();
             }
-            ChatLib.chat(playerInformation.toolIsEquipped);
             if (playerInformation.toolIsEquipped && !Settings.showLegacyGUI) {
                 mainWindow.removeChild(toolInfoWindow);
                 mainWindow.removeChild(xpInfoWindow);
