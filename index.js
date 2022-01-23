@@ -205,6 +205,7 @@ register("renderOverlay", () => {
                 lastCrops = "disabled";
                 mainWindow.clearChildren();
             }
+            ChatLib.chat(playerInformation.toolIsEquipped);
             if (playerInformation.toolIsEquipped && !Settings.showLegacyGUI) {
                 mainWindow.removeChild(toolInfoWindow);
                 mainWindow.removeChild(xpInfoWindow);
@@ -259,6 +260,8 @@ register('tick', () => {
         if (playerInformation.toolIsEquipped) {
             playerInformation.toolType = (['pumpkin', 'melon', 'cocoa'].includes(playerInformation.crop)) ? 'Axe' : 'Hoe';
         }
+    } else {
+        playerInformation.toolIsEquipped = false;
     }
     // render lines
     tickStep++;
