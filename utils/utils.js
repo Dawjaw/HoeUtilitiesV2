@@ -98,6 +98,7 @@ export function getMaxEfficiencyYield(cropRate, crop) {
 }
 
 export function addCropDrop(blockBroken){
+    if(!Player?.getHeldItem()?.getItemNBT()) {return;}
     const heldItem = Player.getHeldItem().getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
     let randomDrops = 0;
     if (heldItem.getString('id').match(/PUMPKIN_DICER/) && blockBroken === 'pumpkin') {
@@ -112,6 +113,7 @@ export function addCropDrop(blockBroken){
 }
 
 export function getCropDrop(blockBroken){
+    if(!Player?.getHeldItem()?.getItemNBT()) {return;}
     const heldItem = Player.getHeldItem().getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
     let randomDrops = 0;
     if (heldItem.getString('id').match(/PUMPKIN_DICER/) && blockBroken === 'pumpkin') {
