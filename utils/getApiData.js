@@ -89,7 +89,7 @@ export function getApiData(API_C) {
                 globalStats.farmingExpCap = (profile_in_use.experience_skill_farming !== undefined) ? profile_in_use.experience_skill_farming : undefined;
 
                 let level = 0;
-                console.log(JSON.stringify(profile_in_use.pets));
+                //console.log(JSON.stringify(profile_in_use.pets));
                 profile_in_use.pets.forEach(pet => {
                     if (pet.active && (pet.type.toString() === "ELEPHANT" || pet.type.toString() === "MOOSHROOM_COW")) {
                         petLevel.forEach(xpRequired => {

@@ -486,8 +486,15 @@ function calculateCoinsPerHour() {
             let c1 = drops * 0.2;
             bountifulBonus = (c1 * 20 * 60 * 60);
         }
+        let extraMushrooms = 0;
+        if (petInformation.activePet === "MOOSHROOM_COW") {
+            extraMushrooms = ((100 + hoeStats.cultivating + hoeStats.rarity + (globalStats.farmingLevel * 4) + hoeStats.harvesting + globalStats.fFD + petInformation.fortuneBonus + (globalStats.anita * 2)) / 100) * 2;
+            let extraDrops = ((globalStats.blockPerSeconds * extraMushrooms) * 60 * 60) / Number(bazaarFarmingCompression["mushroom"]);
+            let ExtraPrice = (npcPricing[playerInformation.crop] >= bazaarObject[playerInformation.crop]) ? npcPricing["mushroom"] : bazaarObject["mushroom"];
+            extraMushrooms = extraDrops * ExtraPrice;
+        }
         cropIncome = cropGain;
-        let totalCropIncome = addCommas(Math.round(cropGain + bountifulBonus));
+        let totalCropIncome = addCommas(Math.round(cropGain + bountifulBonus + extraMushrooms));
         globalStats.cropGain = totalCropIncome;
         cropIncomeLast = Date.now();
     }

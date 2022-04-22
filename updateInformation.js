@@ -180,11 +180,11 @@ export function updateGlobalFarmingStats(xpPerHour) {
             }
             strengthBonus += Math.floor(playerInformation.strength / 10);
             petInformation.fortuneBonus = petAttribute + minosBonus + strengthBonus;
-            console.log(`attr: ${petAttribute} | minos: ${minosBonus} |  str: ${strengthBonus}`);
+            //console.log(`attr: ${petAttribute} | minos: ${minosBonus} |  str: ${strengthBonus}`);
         }
     }
 
-    console.log(JSON.stringify(petInformation));
+    //console.log(JSON.stringify(petInformation));
 }
 
 function timeLeftUntilNextLevelInHoursMinutesSeconds(xpPerHour, currentXP, xpRequiredForNextLevel) {
