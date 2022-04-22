@@ -2,7 +2,7 @@
 /// <reference lib="es2015" />
 
 import Settings from "./config";
-import gui, { blockMaxAge, npcPricing, blockToMCBlockName, bazaarFarmingCompression, playerInformation, farmingBlockTypes, hoeStats, collection, globalStats, blocksToCollectionType } from './utils/constants';
+import gui, { blockMaxAge, npcPricing, blockToMCBlockName, bazaarFarmingCompression, playerInformation, farmingBlockTypes, hoeStats, collection, globalStats, blocksToCollectionType, petInformation } from './utils/constants';
 import { initializeToolInfo, renderToolInfo } from "./displays/toolInfo";
 import { getToolInfoWindow, getXpInfoWindow, getJacobTimerWindow, getJacobTimerTimer } from "./displays/elementaDisplay";
 import { aggregateFarmingFortune, updateGlobalFarmingStats, updateHoeStats } from "./updateInformation";
@@ -167,6 +167,16 @@ register('chat', (key) => {
     ChatLib.chat("§eSet api key!")
     ChatLib.command("ct load", true);
 }).setCriteria("Your new API key is ${key}");
+
+register('chat', (key) => {
+    if(ChatLib.removeFormatting(key).includes("Elephant")) { petInformation.activePet = "ELEPHANT"; }
+    if(ChatLib.removeFormatting(key).includes("Mooshroom Cow")) { petInformation.activePet = "MOOSHROOM_COW"; }
+}).setCriteria("You summoned your ${key}!");
+
+register('chat', (key) => {
+    if(ChatLib.removeFormatting(key).includes("Elephant")) { petInformation.activePet = ""; }
+    if(ChatLib.removeFormatting(key).includes("Mooshroom Cow")) { petInformation.activePet = ""; }
+}).setCriteria("You despawned your ${key}!");
 
 // api
 API_C = getApiData(API_C);
@@ -513,7 +523,7 @@ function printDebugInfo() {
     ChatLib.chat("§2Farming For Dummies Bonus: §f" + globalStats.fFD);
     ChatLib.chat("§2Turbo Bonus: §f" + hoeStats.turbo);
     ChatLib.chat("§2Item Specific Bonus: §f" + hoeStats.itemRate);
-    ChatLib.chat("§2Elephant Bonus: §f" + globalStats.elephant);
+    ChatLib.chat("§2Pet Bonus: §f" + petInformation.fortuneBonus);
     ChatLib.chat("§2Anita Bonus: §f" + (globalStats.anita * 2));
     ChatLib.chat("§9TOTAL: §f" + playerInformation.total);
 }

@@ -1,5 +1,5 @@
 import Settings from "./config";
-import { toolToTurboEnchant, playerInformation, turboEnchants, rarities, skillCurves, hoeStats, globalStats, bountiful } from "./utils/constants";
+import { toolToTurboEnchant, playerInformation, turboEnchants, rarities, skillCurves, hoeStats, globalStats, bountiful, petInformation } from "./utils/constants";
 import { addCommas } from "./utils/utils";
 
 function checkInput(input, words) {
@@ -102,7 +102,7 @@ export function aggregateFarmingFortune() {
     playerInformation.total = 0;
     playerInformation.total += 100;
     playerInformation.total += Number((globalStats.farmingLevel * 4 === undefined) ? 0 : (globalStats.farmingLevel * 4));
-    playerInformation.total += Number((globalStats.elephant === undefined) ? 0 : globalStats.elephant);
+    playerInformation.total += Number((petInformation.fortuneBonus === undefined) ? 0 : petInformation.fortuneBonus);
     playerInformation.total += Number((globalStats.fFD === undefined) ? 0 : globalStats.fFD);
     playerInformation.total += Number((globalStats.anita * 2 === undefined) ? 0 : (globalStats.anita * 2));
     playerInformation.total += Number((hoeStats.tierBonus === undefined) ? 0 : hoeStats.tierBonus);
@@ -121,16 +121,14 @@ export function updateGlobalFarmingStats(xpPerHour) {
         globalStats.fFD = heldItem.getInteger('farming_for_dummies_count');
     }
 
-    // get Elephant level
     let playerName = Player.getName();
-    World.getAllEntities()?.forEach(pet => {
-        if (pet.getName() === undefined || pet.getName() === null) return;
-        pet = ChatLib.removeFormatting(pet.getName());
-        if (pet.includes(playerName) && pet.includes("Elephant")) {
-            globalStats.elephant = Number(pet.split(" ")[0].replace('[Lv', '').replace("]", "")) * 1.8;
-        }
-        else {
-            globalStats.elephant = globalStats.apiElephantLevel * 1.8;
+    const ArmorStand = Java.type("net.minecraft.entity.item.EntityArmorStand");
+    World.getAllEntitiesOfType(ArmorStand.class)?.forEach(entity => {
+        if (entity.getName() === undefined || entity.getName() === null) return;
+        entity = ChatLib.removeFormatting(entity.getName());
+        if (entity.includes(playerName) && (entity.includes("Elephant") || entity.includes("Mooshroom Cow"))) {
+            petInformation.petLevel = Number(entity.split(" ")[0].replace('[Lv', '').replace("]", ""));
+            entity.includes("Elephant") ? petInformation.activePet === "ELEPHANT" : petInformation.activePet === "MOOSHROOM_COW";
         }
     });
 
@@ -153,6 +151,10 @@ export function updateGlobalFarmingStats(xpPerHour) {
                 }
                 globalStats.xpPerHourExpected = (globalStats.xpGained * 20 * 60 * 60);
             }
+            if (name.includes("Strength")) {
+                let re = /(\d+)/;
+                playerInformation.strength = re.exec(ChatLib.removeFormatting(name))[0];
+            }
         } catch (e) {
             console.log("Error Update Information TabList", e.stack);
             console.log("Error", e.name);
@@ -164,6 +166,25 @@ export function updateGlobalFarmingStats(xpPerHour) {
     let string = `${timeLeft['hours']}:${timeLeft['minutes']}:${timeLeft['seconds']}`;
     globalStats.timeLeftUntilNextLevel = string;
 
+    if(petInformation.activePet) {
+        if(petInformation.activePet === "ELEPHANT") {
+            petInformation.fortuneBonus = petInformation.petLevel * 1.8;
+        }
+        else {
+            let petAttribute = 0;
+            let minosBonus = 0;
+            let strengthBonus = 0;
+            petAttribute = Math.floor(petInformation.petLevel * 0.5);
+            if (petInformation.minosRelic) {
+                minosBonus = Math.floor(petAttribute * 0.33);
+            }
+            strengthBonus += Math.floor(playerInformation.strength / 10);
+            petInformation.fortuneBonus = petAttribute + minosBonus + strengthBonus;
+            console.log(`attr: ${petAttribute} | minos: ${minosBonus} |  str: ${strengthBonus}`);
+        }
+    }
+
+    console.log(JSON.stringify(petInformation));
 }
 
 function timeLeftUntilNextLevelInHoursMinutesSeconds(xpPerHour, currentXP, xpRequiredForNextLevel) {

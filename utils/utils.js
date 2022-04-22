@@ -1,5 +1,5 @@
 import Settings from "../config";
-import {baseCropDrops, playerInformation, collectionTypeToBlocks, colors, units, configLocation, hoeStats, collection, globalStats} from "./constants";
+import {baseCropDrops, playerInformation, collectionTypeToBlocks, colors, units, configLocation, hoeStats, collection, globalStats, petInformation} from "./constants";
 const Color = Java.type("java.awt.Color");
 
 export function addCommas(str) {
@@ -138,7 +138,7 @@ export function getJavaColor(color){
 }
 
 export function resetGlobalFarmingInformation() {
-    globalStats.elephant = 0
+    petInformation.fortuneBonus = 0
     globalStats.fFD = 0
     hoeStats.tierBonus = 0
     hoeStats.cultivating = 0

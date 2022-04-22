@@ -26,17 +26,20 @@ export let playerInformation = {
     toolType: "",
     crop: "",
     total: 0,
+    strength: 0,
     getters: { 
         getToolIsEquipped: () => playerInformation._toolIsEquipped,
         getToolType: () => playerInformation._toolType,
         getCrop: () => playerInformation._crop,
         getTotal: () => playerInformation._total,
+        getStrength: () => playerInformation._strength,
     },
     setters: {
         setToolIsEquipped: (toolIsEquipped) => playerInformation._toolIsEquipped = toolIsEquipped,
         setToolType: (toolType) => playerInformation._toolType = toolType,
         setCrop: (crop) => playerInformation._crop = crop,
         setTotal: (total) => playerInformation._total = total,
+        setStrength: (strength) => playerInformation._strength = strength,
     },
 }
 
@@ -108,6 +111,25 @@ export let collection = {
     },
 }
 
+export let petInformation = {
+    activePet: "",
+    petLevel: 0,
+    minosRelic: false,
+    fortuneBonus: 0,
+    getters: {
+        getActivePet: () => petInformation._activePet,
+        getPetLevel: () => petInformation._petLevel,
+        getMinosRelic: () => petInformation._minosRelic,
+        getFortuneBonus: () => petInformation._fortuneBonus,
+    },
+    setters: {
+        setActivePet: (activePet) => petInformation._activePet = activePet,
+        setPetLevel: (petLevel) => petInformation._petLevel = petLevel,
+        setMinosRelic: (minosRelic) => petInformation._minosRelic = minosRelic,
+        setFortuneBonus: (fortuneBonus) => petInformation._fortuneBonus = fortuneBonus,
+    },
+}
+
 export const cropToImage = {
     "Carrot": "carrot",
     "Melon": "melon",
@@ -164,9 +186,7 @@ export let globalStats = {
     anita: 0,
     farmingCap: 0,
     farmingExpAPI: 0,
-    apiElephantLevel: 0,
     farmingLevel: 0,
-    elephant: 0,
     fFD: 0,
     xpGained: undefined,
     currentXP: undefined,
@@ -188,9 +208,7 @@ export let globalStats = {
         getAnita: () => globalStats._anita,
         getFarmingCap: () => globalStats._farmingCap,
         getFarmingExpAPI: () => globalStats._farmingExpAPI,
-        getApiElephantLevel: () => globalStats._apiElephantLevel,
         getFarmingLevel: () => globalStats._farmingLevel,
-        getElephant: () => globalStats._elephant,
         getFD: () => globalStats._fFD,
         getXpGained: () => globalStats._xpGained,
         getCurrentXP: () => globalStats._currentXP,
@@ -213,9 +231,7 @@ export let globalStats = {
         setAnita: (anita) => globalStats._anita = anita,
         setFarmingCap: (farmingCap) => globalStats._farmingCap = farmingCap,
         setFarmingExpAPI: (farmingExpAPI) => globalStats._farmingExpAPI = farmingExpAPI,
-        setApiElephantLevel: (apiElephantLevel) => globalStats._apiElephantLevel = apiElephantLevel,
         setFarmingLevel: (farmingLevel) => globalStats._farmingLevel = farmingLevel,
-        setElephant: (elephant) => globalStats._elephant = elephant,
         setFD: (fFD) => globalStats._fFD = fFD,
         setXpGained: (xpGained) => globalStats._xpGained = xpGained,
         setCurrentXP: (currentXP) => globalStats._currentXP = currentXP,

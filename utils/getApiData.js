@@ -1,5 +1,5 @@
 import Settings from '../config'
-import {bazaarFarmingNames, bazaarNameToCropName, petLevel, skillCurves, collection, globalStats} from "./constants";
+import {bazaarFarmingNames, bazaarNameToCropName, petLevel, skillCurves, collection, globalStats, petInformation} from "./constants";
 import Promise from "../../PromiseV2";
 import request from "../../requestV2";
 
@@ -89,8 +89,9 @@ export function getApiData(API_C) {
                 globalStats.farmingExpCap = (profile_in_use.experience_skill_farming !== undefined) ? profile_in_use.experience_skill_farming : undefined;
 
                 let level = 0;
+                console.log(JSON.stringify(profile_in_use.pets));
                 profile_in_use.pets.forEach(pet => {
-                    if (pet.type.toString() === "ELEPHANT" && pet.active === true) {
+                    if (pet.active && (pet.type.toString() === "ELEPHANT" || pet.type.toString() === "MOOSHROOM_COW")) {
                         petLevel.forEach(xpRequired => {
                             if (pet.exp > xpRequired) {
                                 level += 1;
@@ -99,9 +100,19 @@ export function getApiData(API_C) {
                                 level = 100;
                             }
                         });
+                        petInformation.activePet = pet.type.toString();
+                        petInformation.petLevel = level;
+                        if (pet.heldItem === "MINOS_RELIC") {
+                            petInformation.minosRelic = true;
+                        } else {
+                            petInformation.minosRelic = false;
+                        }
+                    } else {
+                        petInformation.activePet = "";
+                        petInformation.petLevel = 0;
+                        petInformation.minosRelic = false;
                     }
                 });
-                globalStats.apiElephantLevel = level;
 
                 if (globalStats.farmingExpCap !== undefined) {
                     let farmingLevel = 0;
