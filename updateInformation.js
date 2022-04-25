@@ -174,13 +174,16 @@ export function updateGlobalFarmingStats(xpPerHour) {
             let petAttribute = 0;
             let minosBonus = 0;
             let strengthBonus = 0;
-            petAttribute = Math.floor(petInformation.petLevel * 0.5);
+            let strRequiredPerFortune = 0;
+            petAttribute = 10 + (petInformation.petLevel);
+            strRequiredPerFortune = (40 - (petInformation.petLevel * 0.2));
             if (petInformation.minosRelic) {
-                minosBonus = Math.floor(petAttribute * 0.33);
+                minosBonus = Math.ceil(petAttribute * 0.33);
             }
-            strengthBonus += Math.floor(playerInformation.strength / 10);
+            strengthBonus += Math.floor(playerInformation.strength / strRequiredPerFortune);
             petInformation.fortuneBonus = petAttribute + minosBonus + strengthBonus;
-            //console.log(`attr: ${petAttribute} | minos: ${minosBonus} |  str: ${strengthBonus}`);
+            //console.log(`attr: ${petAttribute + minosBonus} |  str: ${strengthBonus}`);
+            //console.log(`strperff: ${strRequiredPerFortune}`);
         }
     }
 

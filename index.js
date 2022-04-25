@@ -170,12 +170,12 @@ register('chat', (key) => {
 
 register('chat', (key) => {
     if(ChatLib.removeFormatting(key).includes("Elephant")) { petInformation.activePet = "ELEPHANT"; }
-    if(ChatLib.removeFormatting(key).includes("Mooshroom Cow")) { petInformation.activePet = "MOOSHROOM_COW"; }
+    if(ChatLib.removeFormatting(key).includes("Mooshroom")) { petInformation.activePet = "MOOSHROOM_COW"; }
 }).setCriteria("You summoned your ${key}!");
 
 register('chat', (key) => {
     if(ChatLib.removeFormatting(key).includes("Elephant")) { petInformation.activePet = ""; }
-    if(ChatLib.removeFormatting(key).includes("Mooshroom Cow")) { petInformation.activePet = ""; }
+    if(ChatLib.removeFormatting(key).includes("Mooshroom")) { petInformation.activePet = ""; }
 }).setCriteria("You despawned your ${key}!");
 
 // api
@@ -488,7 +488,8 @@ function calculateCoinsPerHour() {
         }
         let extraMushrooms = 0;
         if (petInformation.activePet === "MOOSHROOM_COW") {
-            extraMushrooms = ((100 + hoeStats.cultivating + hoeStats.rarity + (globalStats.farmingLevel * 4) + hoeStats.harvesting + globalStats.fFD + petInformation.fortuneBonus + (globalStats.anita * 2)) / 100) * 2;
+            //extraMushrooms = ((100 + hoeStats.cultivating + hoeStats.rarity + (globalStats.farmingLevel * 4) + hoeStats.harvesting + globalStats.fFD + petInformation.fortuneBonus + (globalStats.anita * 2)) / 100) * 2;
+            extraMushrooms = (petInformation.petLevel / 100);
             let extraDrops = ((globalStats.blockPerSeconds * extraMushrooms) * 60 * 60) / Number(bazaarFarmingCompression["mushroom"]);
             let ExtraPrice = (npcPricing[playerInformation.crop] >= bazaarObject[playerInformation.crop]) ? npcPricing["mushroom"] : bazaarObject["mushroom"];
             extraMushrooms = extraDrops * ExtraPrice;
