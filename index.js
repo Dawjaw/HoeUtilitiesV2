@@ -1,4 +1,4 @@
-/// <reference types="../CTAutocomplete" />
+/// <reference types="../CTAutocomplete-2.0.4" />
 /// <reference lib="es2015" />
 
 import Settings from "./config";
@@ -120,14 +120,14 @@ function guiPreload() {
 
 if (!Settings.firstRun) {
     ChatLib.chat("§eThank you for downloading HoeUtilitiesV2!");
-    ChatLib.chat("§aType §6/hu2 §ato open the Settings menu.");
-    ChatLib.chat("§aType §6/hu2 help §ato see a list of commands.");
-    ChatLib.chat("§aType §6/hu2 gui §ato move the gui around.");
-    ChatLib.chat("§aType §6/hu2debug §ato print out a breakdown of your farming fortune.");
-    ChatLib.chat("§aCertain features might not work if you haven't set your api key yet!");
+    ChatLib.chat("§aType §6/hu2 §ato open the Settings menu.§r");
+    ChatLib.chat("§aType §6/hu2 help §ato see a list of commands.§r");
+    ChatLib.chat("§aType §6/hu2 gui §ato move the gui around.§r");
+    ChatLib.chat("§aType §6/hu2debug §ato print out a breakdown of your farming fortune.§r");
+    ChatLib.chat("§aCertain features might not work if you haven't set your api key yet!§r");
     const clickableMessage = new Message(
         "§aIf you have any issues, please report them on the ",
-        new TextComponent("github page.").setClick("open_url", "https://github.com/Dawjaw/HoeUtilitiesV2"),
+        new TextComponent("github page.§r").setClick("open_url", "https://github.com/Dawjaw/HoeUtilitiesV2"),
         "."
     );
     ChatLib.chat(clickableMessage);
@@ -144,17 +144,17 @@ register("command", (arg1, arg2) => {
     if (arg1 === "key" && arg2 !== undefined && arg2.length === 36) {
         Settings.apiKey = arg2;
         Settings.save();
-        ChatLib.chat("§eSet api key!")
+        ChatLib.chat("§eSet api key!§r")
         ChatLib.command("ct load", true);
-    } else if (arg1 === "key" && arg2 === undefined) ChatLib.chat("§eInvalid command usage or invalid key");
+    } else if (arg1 === "key" && arg2 === undefined) ChatLib.chat("§eInvalid command usage or invalid key§r");
     if (arg1 === "help") {
-        ChatLib.chat("§aType §6/hu2 §ato open the Settings menu.");
-        ChatLib.chat("§aType §6/hu2 help §ato see a list of commands.");
-        ChatLib.chat("§aType §6/hu2 gui §ato move the gui around.");
-        ChatLib.chat("§aType §6/hu2debug §ato print out a breakdown of your farming fortune.");
+        ChatLib.chat("§aType §6/hu2 §ato open the Settings menu.§r");
+        ChatLib.chat("§aType §6/hu2 help §ato see a list of commands.§r");
+        ChatLib.chat("§aType §6/hu2 gui §ato move the gui around.§r");
+        ChatLib.chat("§aType §6/hu2debug §ato print out a breakdown of your farming fortune.§r");
         const clickableMessage = new Message(
             "§aIf you have any issues, please report them on the ",
-            new TextComponent("github page.").setClick("open_url", "https://github.com/Dawjaw/HoeUtilitiesV2"),
+            new TextComponent("github page.§r").setClick("open_url", "https://github.com/Dawjaw/HoeUtilitiesV2"),
             "."
         );
         ChatLib.chat(clickableMessage);
@@ -164,7 +164,7 @@ register("command", (arg1, arg2) => {
 register('chat', (key) => {
     Settings.apiKey = key;
     Settings.save();
-    ChatLib.chat("§eSet api key!")
+    ChatLib.chat("§eSet api key!§r")
     ChatLib.command("ct load", true);
 }).setCriteria("Your new API key is ${key}");
 

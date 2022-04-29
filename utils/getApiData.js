@@ -20,7 +20,7 @@ const sendRequest = (url) => {
 export function getApiData(API_C) {
     try {
         if (Settings.apiKey.length !== 36) {
-            ChatLib.chat("§ePlease set your api key by generating a new key with §b/api new §eor using §b/hu2 key yourkey §e!");
+            ChatLib.chat("§ePlease set your api key by generating a new key with §b/api new §eor using §b/hu2 key yourkey §e!§r");
             return API_C;
         }
         if (API_C === undefined) {
@@ -44,7 +44,7 @@ export function getApiData(API_C) {
         sendRequest('https://api.hypixel.net/skyblock/profiles?key=' + Settings.apiKey + '&uuid=' + uuid)
             .then(json => {
                 if (json.profiles === undefined) {
-                    ChatLib.chat("&6Couldn't find any Skyblock profiles for this player.");
+                    ChatLib.chat("&6Couldn't find any Skyblock profiles for this player.§r");
                     return API_C;
                 }
 
@@ -89,9 +89,10 @@ export function getApiData(API_C) {
                 globalStats.farmingExpCap = (profile_in_use.experience_skill_farming !== undefined) ? profile_in_use.experience_skill_farming : undefined;
 
                 let level = 0;
-                //console.log(JSON.stringify(profile_in_use.pets));
+                let found = false;
                 profile_in_use.pets.forEach(pet => {
                     if (pet.active && (pet.type.toString() === "ELEPHANT" || pet.type.toString() === "MOOSHROOM_COW")) {
+                        found = true;
                         petLevel.forEach(xpRequired => {
                             if (pet.exp > xpRequired) {
                                 level += 1;
@@ -107,12 +108,13 @@ export function getApiData(API_C) {
                         } else {
                             petInformation.minosRelic = false;
                         }
-                    } else {
-                        petInformation.activePet = "";
-                        petInformation.petLevel = 0;
-                        petInformation.minosRelic = false;
-                    }
+                    } 
                 });
+                if (!found) {
+                    petInformation.activePet = "";
+                    petInformation.petLevel = 0;
+                    petInformation.minosRelic = false;
+                }
 
                 if (globalStats.farmingExpCap !== undefined) {
                     let farmingLevel = 0;
@@ -135,7 +137,7 @@ export function getApiData(API_C) {
 export function getBazaarData(return_price) {
     let price_sheet = [];
     if (Settings.apiKey.length !== 36) {
-        ChatLib.chat("§ePlease set your api key by generating a new key with §b/api new §eor using §b/hu2 key yourkey §e!");
+        ChatLib.chat("§ePlease set your api key by generating a new key with §b/api new §eor using §b/hu2 key yourkey §e!§r");
         return return_price;
     }
     sendRequest('https://sky.lea.moe/api/bazaar')

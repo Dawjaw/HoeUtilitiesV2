@@ -166,11 +166,11 @@ export function updateGlobalFarmingStats(xpPerHour) {
     let string = `${timeLeft['hours']}:${timeLeft['minutes']}:${timeLeft['seconds']}`;
     globalStats.timeLeftUntilNextLevel = string;
 
-    if(petInformation.activePet) {
+    if((petInformation.activePet === "ELEPHANT" || petInformation.activePet === "MOOSHROOM_COW")) {
         if(petInformation.activePet === "ELEPHANT") {
             petInformation.fortuneBonus = petInformation.petLevel * 1.8;
         }
-        else {
+        else if(petInformation.activePet === "MOOSHROOM_COW") {
             let petAttribute = 0;
             let minosBonus = 0;
             let strengthBonus = 0;
@@ -182,11 +182,8 @@ export function updateGlobalFarmingStats(xpPerHour) {
             }
             strengthBonus += Math.floor(playerInformation.strength / strRequiredPerFortune);
             petInformation.fortuneBonus = petAttribute + minosBonus + strengthBonus;
-            //console.log(`attr: ${petAttribute + minosBonus} |  str: ${strengthBonus}`);
-            //console.log(`strperff: ${strRequiredPerFortune}`);
         }
     }
-
     //console.log(JSON.stringify(petInformation));
 }
 
