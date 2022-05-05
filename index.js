@@ -119,7 +119,7 @@ function guiPreload() {
 
 
 if (!Settings.firstRun) {
-    ChatLib.chat("§eThank you for downloading HoeUtilitiesV2!");
+    ChatLib.chat("§eThank you for downloading HoeUtilitiesV2!§r");
     ChatLib.chat("§aType §6/hu2 §ato open the Settings menu.§r");
     ChatLib.chat("§aType §6/hu2 help §ato see a list of commands.§r");
     ChatLib.chat("§aType §6/hu2 gui §ato move the gui around.§r");
@@ -189,16 +189,16 @@ export let xpInfo = initializeXpInfo();
 
 // cache images 
 if (!Settings.firstRun) {
-    const image1 = new Image("carrot.png", "https://jacobs.jeanlaurent.fr/assets/img/carrot.png");
-    const image2 = new Image("melon.png", "https://jacobs.jeanlaurent.fr/assets/img/melon.png");
-    const image3 = new Image("cocoa.png", "https://jacobs.jeanlaurent.fr/assets/img/cocoa_beans.png");
-    const image4 = new Image("pumpkin.png", "https://jacobs.jeanlaurent.fr/assets/img/pumpkin.png");
-    const image5 = new Image("cane.png", "https://jacobs.jeanlaurent.fr/assets/img/sugar_cane.png");
-    const image6 = new Image("cactus.png", "https://jacobs.jeanlaurent.fr/assets/img/cactus.png");
-    const image7 = new Image("potato.png", "https://jacobs.jeanlaurent.fr/assets/img/potato.png");
-    const image8 = new Image("mushroom.png", "https://jacobs.jeanlaurent.fr/assets/img/mushroom.png");
-    const image9 = new Image("wheat.png", "https://jacobs.jeanlaurent.fr/assets/img/wheat.png");
-    const image10 = new Image("wart.png", "https://jacobs.jeanlaurent.fr/assets/img/nether_wart.png");
+    const image1 = new Image("carrot.png", "https://dawjaw.net/static/carrot.png");
+    const image2 = new Image("melon.png", "https://dawjaw.net/static/melon.png");
+    const image3 = new Image("cocoa.png", "https://dawjaw.net/static/cocoa.png");
+    const image4 = new Image("pumpkin.png", "https://dawjaw.net/static/pumpkin.png");
+    const image5 = new Image("cane.png", "https://dawjaw.net/static/cane.png");
+    const image6 = new Image("cactus.png", "https://dawjaw.net/static/cactus.png");
+    const image7 = new Image("potato.png", "https://dawjaw.net/static/potato.png");
+    const image8 = new Image("mushroom.png", "https://dawjaw.net/static/mushroom.png");
+    const image9 = new Image("wheat.png", "https://dawjaw.net/static/wheat.png");
+    const image10 = new Image("wart.png", "https://dawjaw.net/static/wart.png");
 }
 
 Settings.firstRun = true;
